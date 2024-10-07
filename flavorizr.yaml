@@ -1,0 +1,24 @@
+flavors:
+  development:
+    ide: "idea"
+    app:
+      name: "TaskSense"
+
+    android:
+      applicationId: "com.demo.task_sense"
+      icon: "assets/icons/logo.png"
+    ios:
+      bundleId: "com.voidK.taskSense"
+      icon: "assets/icons/logo.png"
+
+  # making same config for both development & production as this is just a demo app.
+  production:
+    app:
+      name: "MovieMate"
+
+    android:
+      applicationId: "com.demo.task_sense"
+      icon: "assets/icons/logo.png"
+    ios:
+      bundleId: "com.demo.taskSense"
+      icon: "assets/icons/logo.png"
