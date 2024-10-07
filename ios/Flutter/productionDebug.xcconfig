@@ -3,5 +3,5 @@
 
 FLUTTER_TARGET=lib/main_production.dart
 ASSET_PREFIX=production
-BUNDLE_NAME=MovieMate
-BUNDLE_DISPLAY_NAME=MovieMate
+BUNDLE_NAME=Task Sense
+BUNDLE_DISPLAY_NAME=Task Sense

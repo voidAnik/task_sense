@@ -3,5 +3,5 @@
 
 FLUTTER_TARGET=lib/main_development.dart
 ASSET_PREFIX=development
-BUNDLE_NAME=TaskSense
-BUNDLE_DISPLAY_NAME=TaskSense
+BUNDLE_NAME=Task Sense
+BUNDLE_DISPLAY_NAME=Task Sense

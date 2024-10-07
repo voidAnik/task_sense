@@ -2,7 +2,7 @@ flavors:
   development:
     ide: "idea"
     app:
-      name: "TaskSense"
+      name: "Task Sense"
 
     android:
       applicationId: "com.demo.task_sense"
@@ -14,7 +14,7 @@ flavors:
   # making same config for both development & production as this is just a demo app.
   production:
     app:
-      name: "MovieMate"
+      name: "Task Sense"
 
     android:
       applicationId: "com.demo.task_sense"
