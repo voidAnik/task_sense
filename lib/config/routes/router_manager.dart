@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:task_sense/app/flavors.dart';
 import 'package:task_sense/config/routes/navigator_observer.dart';
 import 'package:task_sense/features/startup/presentation/screens/selection_screen.dart';
+import 'package:task_sense/features/startup/presentation/screens/splash_screen.dart';
 
 class RouterManager {
   static final config = GoRouter(
@@ -16,6 +17,10 @@ class RouterManager {
           path: SelectionScreen.path,
           builder: (context, state) =>
               const FlavorBanner(show: kDebugMode, child: SelectionScreen()),
+        ),
+        GoRoute(
+          path: SplashScreen.path,
+          builder: (context, state) => const SplashScreen(),
         ),
       ]);
 }

@@ -25,7 +25,8 @@ const Color primaryColor = Color(0xFF33CCCC);
 const Color primaryColorDark = Colors.cyan;
 const Color accentLightColor = Colors.cyanAccent;
 //const Color backgroundColor = Colors.white;
-const Color backgroundColor = Color(0xFFF7F7F7);
+//const Color backgroundColor = Color(0xFFF7F7F7);
+const Color backgroundColor = Colors.white;
 const Color actionBarIconColor = Colors.black;
 
 // Dark theme colors
