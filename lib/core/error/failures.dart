@@ -14,6 +14,11 @@ class DatabaseFailure extends Failure {
   const DatabaseFailure({required this.error});
 }
 
+class SensorFailure extends Failure {
+  final String error;
+  const SensorFailure({required this.error});
+}
+
 class InternalFailure extends Failure {
   final String error;
   const InternalFailure({required this.error});

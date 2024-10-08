@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:task_sense/core/constants/assets.dart';
 import 'package:task_sense/core/extensions/context_extension.dart';
+import 'package:task_sense/core/language/generated/locale_keys.g.dart';
 
 class SplashScreen extends StatefulWidget {
   static const String path = '/splash_screen';
@@ -48,11 +50,11 @@ class _SplashScreenState extends State<SplashScreen> {
             height: 12,
           ),
           Text(
-            'Daily TO-DO App',
+            LocaleKeys.splashTitle,
             style: GoogleFonts.sigmar(
               fontSize: 20,
             ),
-          )
+          ).tr()
         ],
       ),
     );

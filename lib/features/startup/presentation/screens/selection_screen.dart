@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_sense/config/theme/colors.dart';
 import 'package:task_sense/core/extensions/context_extension.dart';
+import 'package:task_sense/core/language/generated/locale_keys.g.dart';
 import 'package:task_sense/features/startup/presentation/screens/splash_screen.dart';
 
 class SelectionScreen extends StatelessWidget {
@@ -24,14 +26,14 @@ class SelectionScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _createButton(context, text: 'A TO-DO List', onPressed: () {
+          _createButton(context, text: LocaleKeys.todoList.tr(), onPressed: () {
             context.push(SplashScreen.path);
           }),
           SizedBox(
             height: context.height * 0.03,
           ),
           _createButton(context,
-              text: 'Sensor Tracking',
+              text: LocaleKeys.sensorTracking.tr(),
               backgroundColor: buttonBG,
               textColor: Colors.white,
               onPressed: () {})

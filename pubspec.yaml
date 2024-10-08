@@ -37,6 +37,9 @@ dependencies:
   # for localization
   easy_localization: ^3.0.7
 
+  # for sensor data
+  sensors_plus: ^6.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
