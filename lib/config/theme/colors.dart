@@ -5,6 +5,7 @@ const Color white = Colors.white;
 const Color green = Colors.green;
 
 const Color buttonBG = Color(0xFF3F69FF);
+const Color borderColor = Color(0xFFEAEAEA);
 
 //const Color actionBarIconColor = Color(0xFF030104);
 const Color groupTitleColor = Color(0xFF030303);

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_sense/app/flavors.dart';
 import 'package:task_sense/config/routes/navigator_observer.dart';
+import 'package:task_sense/features/sensor_tracker/presentation/screens/sensor_tracker_screen.dart';
 import 'package:task_sense/features/startup/presentation/screens/selection_screen.dart';
 import 'package:task_sense/features/startup/presentation/screens/splash_screen.dart';
 
@@ -21,6 +22,10 @@ class RouterManager {
         GoRoute(
           path: SplashScreen.path,
           builder: (context, state) => const SplashScreen(),
+        ),
+        GoRoute(
+          path: SensorTrackerScreen.path,
+          builder: (context, state) => const SensorTrackerScreen(),
         ),
       ]);
 }

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:task_sense/config/theme/colors.dart';
 import 'package:task_sense/core/extensions/context_extension.dart';
 import 'package:task_sense/core/language/generated/locale_keys.g.dart';
+import 'package:task_sense/features/sensor_tracker/presentation/screens/sensor_tracker_screen.dart';
 import 'package:task_sense/features/startup/presentation/screens/splash_screen.dart';
 
 class SelectionScreen extends StatelessWidget {
@@ -35,8 +36,9 @@ class SelectionScreen extends StatelessWidget {
           _createButton(context,
               text: LocaleKeys.sensorTracking.tr(),
               backgroundColor: buttonBG,
-              textColor: Colors.white,
-              onPressed: () {})
+              textColor: Colors.white, onPressed: () {
+            context.push(SensorTrackerScreen.path);
+          })
         ],
       ),
     );

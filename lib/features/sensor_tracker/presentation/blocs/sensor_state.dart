@@ -10,27 +10,35 @@ abstract class SensorState extends Equatable {
   List<Object> get props => [_props];
 }
 
-class AccelerometerState extends SensorState {
-  final List<SensorEntity> sensorData;
+class SensorInitial extends SensorState {}
 
-  const AccelerometerState({
-    required this.sensorData,
+class SensorError extends SensorState {
+  final String error;
+
+  const SensorError({
+    required this.error,
   });
+
+  @override
+  List<Object> get props => [error];
 }
 
-class GyroState extends SensorState {
+class SensorLoaded extends SensorState {
   final List<SensorEntity> sensorData;
-  final String activity;
+  final bool highMovement;
 
-  const GyroState({this.sensorData = const [], this.activity = ''});
+  const SensorLoaded({this.sensorData = const [], this.highMovement = false});
 
-  GyroState copyWith({
+  SensorLoaded copyWith({
     List<SensorEntity>? sensorData,
-    String? activity,
+    bool? highMovement,
   }) {
-    return GyroState(
+    return SensorLoaded(
       sensorData: sensorData ?? this.sensorData,
-      activity: activity ?? this.activity,
+      highMovement: highMovement ?? this.highMovement,
     );
   }
+
+  @override
+  List<Object> get props => [sensorData];
 }

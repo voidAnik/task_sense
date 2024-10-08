@@ -1,5 +1,12 @@
 {
   "splashTitle": "Daily TO-DO App",
   "todoList": "A TO-DO List",
-  "sensorTracking": "Sensor Tracking"
+  "sensorTracking": "Sensor Tracking",
+  "gyroTitle": "Gyroscope Sensor Data",
+  "accelTitle": "Accelerometer Sensor Data",
+  "gyroYAxisTitle": "Gyroscope Data (rad/s)",
+  "alert": "Alert",
+  "alertContent": "High movement detected on two axes!",
+  "ok": "Okay",
+  "sensorTrackerTitle": "Sensor Tracker"
 }

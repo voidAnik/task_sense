@@ -39,6 +39,14 @@ dependencies:
 
   # for sensor data
   sensors_plus: ^6.0.1
+  # for chart
+  fl_chart: ^0.69.0
+  syncfusion_flutter_charts: ^27.1.52
+  # for loading animation
+  flutter_spinkit: ^5.2.1
+  # to play ringtone
+  flutter_ringtone_player: ^4.0.0+3
+
 
 dev_dependencies:
   flutter_test:
