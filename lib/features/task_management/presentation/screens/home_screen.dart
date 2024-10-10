@@ -2,12 +2,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:task_sense/config/theme/colors.dart';
 import 'package:task_sense/core/constants/assets.dart';
 import 'package:task_sense/core/extensions/context_extension.dart';
 import 'package:task_sense/core/injection/injection_container.dart';
 import 'package:task_sense/features/task_management/domain/entities/task_count.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_count_cubit.dart';
+import 'package:task_sense/features/task_management/presentation/screens/add_task_screen.dart';
 import 'package:task_sense/features/task_management/presentation/widgets/task_search_delegate.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -24,7 +26,9 @@ class HomeScreen extends StatelessWidget {
         body: _createBody(context),
         floatingActionButton: FloatingActionButton(
           backgroundColor: context.theme.primaryColor,
-          onPressed: () {},
+          onPressed: () {
+            context.push(AddTaskScreen.path);
+          },
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
           child: const Icon(

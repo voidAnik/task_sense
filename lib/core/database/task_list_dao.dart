@@ -8,8 +8,8 @@ class TaskListDao {
 
   TaskListDao(this._db);
 
-  Future<void> insertTaskList(TaskListModel taskList) async {
-    await _db.insert(
+  Future<int> insertTaskList(TaskListModel taskList) async {
+    return await _db.insert(
       taskListsTable,
       taskList.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,

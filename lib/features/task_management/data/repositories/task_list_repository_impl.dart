@@ -12,10 +12,10 @@ class TaskListRepositoryImpl implements TaskListRepository {
   TaskListRepositoryImpl(this._dataSource);
 
   @override
-  Future<Either<Failure, void>> insertTaskList(TaskListModel taskList) async {
+  Future<Either<Failure, int>> insertTaskList(TaskListModel taskList) async {
     try {
-      await _dataSource.insertTaskList(taskList);
-      return const Right(null);
+      final id = await _dataSource.insertTaskList(taskList);
+      return Right(id);
     } on DatabaseException catch (e) {
       return Left(DatabaseFailure(error: e.error));
     }

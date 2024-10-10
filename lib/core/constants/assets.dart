@@ -2,6 +2,7 @@
 class Assets {
   Assets._();
 
+  static const String iconsAddTask = 'assets/icons/add_task.png';
   static const String iconsLogo = 'assets/icons/logo.png';
   static const String iconsSearch = 'assets/icons/search.png';
   static const String imagesProfile = 'assets/images/profile.png';

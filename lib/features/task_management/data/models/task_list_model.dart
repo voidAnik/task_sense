@@ -4,14 +4,14 @@ class TaskListModel extends TaskList {
   TaskListModel({
     super.id,
     required super.title,
-    required super.description,
+    required super.created,
   });
 
   factory TaskListModel.fromJson(Map<String, dynamic> json) {
     return TaskListModel(
       id: json['id'] as int?,
       title: json['title'] as String,
-      description: json['description'] as String,
+      created: DateTime.parse(json['dueDate'] as String),
     );
   }
 
@@ -19,7 +19,19 @@ class TaskListModel extends TaskList {
     return {
       'id': id,
       'title': title,
-      'description': description,
+      'description': created.toIso8601String(),
     };
+  }
+
+  TaskListModel copyWith({
+    int? id,
+    String? title,
+    DateTime? created,
+  }) {
+    return TaskListModel(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      created: created ?? this.created,
+    );
   }
 }

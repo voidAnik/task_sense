@@ -1,25 +1,36 @@
 import 'package:equatable/equatable.dart';
 
 abstract class Failure extends Equatable {
-  const Failure({this.properties = const <dynamic>[]});
-
-  final List properties;
+  final String error;
+  const Failure({required this.error});
 
   @override
-  List<Object> get props => [properties];
+  List<Object> get props => [error];
 }
 
 class DatabaseFailure extends Failure {
-  final String error;
-  const DatabaseFailure({required this.error});
+  const DatabaseFailure({required super.error});
+
+  @override
+  String toString() {
+    return 'DatabaseFailure{error: $error}';
+  }
 }
 
 class SensorFailure extends Failure {
-  final String error;
-  const SensorFailure({required this.error});
+  const SensorFailure({required super.error});
+
+  @override
+  String toString() {
+    return 'SensorFailure{error: $error}';
+  }
 }
 
 class InternalFailure extends Failure {
-  final String error;
-  const InternalFailure({required this.error});
+  const InternalFailure({required super.error});
+
+  @override
+  String toString() {
+    return 'InternalFailure{}';
+  }
 }

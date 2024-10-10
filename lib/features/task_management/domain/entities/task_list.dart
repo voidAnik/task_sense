@@ -1,11 +1,11 @@
 class TaskList {
   final int? id;
   final String title;
-  final String description;
+  final DateTime created;
 
   TaskList({
     this.id,
     required this.title,
-    required this.description,
+    required this.created,
   });
 }

@@ -6,7 +6,7 @@ class TaskListWithCountModel extends TaskList {
   TaskListWithCountModel({
     super.id,
     required super.title,
-    required super.description,
+    required super.created,
     required this.taskCount,
   });
 
@@ -14,7 +14,7 @@ class TaskListWithCountModel extends TaskList {
     return TaskListWithCountModel(
       id: json['id'] as int?,
       title: json['title'] as String,
-      description: json['description'] as String,
+      created: DateTime.parse(json['dueDate'] as String),
       taskCount: json['task_count'] as int,
     );
   }
