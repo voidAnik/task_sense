@@ -35,7 +35,7 @@ class SelectionScreen extends StatelessWidget {
           ),
           _createButton(context,
               text: LocaleKeys.sensorTracking.tr(),
-              backgroundColor: buttonBG,
+              backgroundColor: buttonBGColor,
               textColor: Colors.white, onPressed: () {
             context.push(SensorTrackerScreen.path);
           })

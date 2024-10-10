@@ -6,6 +6,7 @@ import 'package:task_sense/config/routes/navigator_observer.dart';
 import 'package:task_sense/features/sensor_tracker/presentation/screens/sensor_tracker_screen.dart';
 import 'package:task_sense/features/startup/presentation/screens/selection_screen.dart';
 import 'package:task_sense/features/startup/presentation/screens/splash_screen.dart';
+import 'package:task_sense/features/task_management/presentation/screens/home_screen.dart';
 
 class RouterManager {
   static final config = GoRouter(
@@ -26,6 +27,10 @@ class RouterManager {
         GoRoute(
           path: SensorTrackerScreen.path,
           builder: (context, state) => const SensorTrackerScreen(),
+        ),
+        GoRoute(
+          path: HomeScreen.path,
+          builder: (context, state) => const HomeScreen(),
         ),
       ]);
 }

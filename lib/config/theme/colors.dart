@@ -4,8 +4,10 @@ const Color red = Colors.red;
 const Color white = Colors.white;
 const Color green = Colors.green;
 
-const Color buttonBG = Color(0xFF3F69FF);
+const Color buttonBGColor = Color(0xFF3F69FF);
 const Color borderColor = Color(0xFFEAEAEA);
+const Color secondaryTextColor = Color(0xFF575767);
+const Color secondarySurfaceColor = Color(0xFFF8F8F8);
 
 //const Color actionBarIconColor = Color(0xFF030104);
 const Color groupTitleColor = Color(0xFF030303);
