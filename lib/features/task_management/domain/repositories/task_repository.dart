@@ -7,4 +7,6 @@ abstract class TaskRepository {
   Future<Either<Failure, List<TaskModel>>> getAllTasks(int taskListId);
   Future<Either<Failure, void>> updateTask(TaskModel task);
   Future<Either<Failure, void>> deleteTask(int id);
+  Future<Either<Failure, int>> countIncompleteTasks();
+  Future<Either<Failure, int>> countCompleteTasks();
 }

@@ -1,10 +1,11 @@
 import 'package:task_sense/core/database/task_list_dao.dart';
 import 'package:task_sense/core/error/exceptions.dart';
 import 'package:task_sense/features/task_management/data/models/task_list_model.dart';
+import 'package:task_sense/features/task_management/data/models/task_list_with_count_model.dart';
 
 abstract class TaskListLocalDataSource {
   Future<void> insertTaskList(TaskListModel taskList);
-  Future<List<TaskListModel>> getAllTaskLists();
+  Future<List<TaskListWithCountModel>> getAllTaskLists();
   Future<void> updateTaskList(TaskListModel taskList);
   Future<void> deleteTaskList(int id);
 }
@@ -24,9 +25,9 @@ class TaskListLocalDataSourceImpl implements TaskListLocalDataSource {
   }
 
   @override
-  Future<List<TaskListModel>> getAllTaskLists() async {
+  Future<List<TaskListWithCountModel>> getAllTaskLists() async {
     try {
-      return await dao.getAllTaskLists();
+      return await dao.getTaskListsWithCount();
     } catch (e) {
       throw DatabaseException(error: e.toString());
     }

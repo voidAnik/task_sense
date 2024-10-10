@@ -16,6 +16,7 @@ class HomeScreen extends StatelessWidget {
       backgroundColor: secondarySurfaceColor,
       body: _createBody(context),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: context.theme.primaryColor,
         onPressed: () {},
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
         child: const Icon(

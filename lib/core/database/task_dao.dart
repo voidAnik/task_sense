@@ -63,4 +63,22 @@ class TaskDao {
     );
     return result.map((e) => TaskModel.fromJson(e)).toList();
   }
+
+  Future<int> countIncompleteTasks() async {
+    final result = await _db.rawQuery('''
+      SELECT COUNT(*) as incompleteCount 
+      FROM $tasksTable 
+      WHERE $taskColumnIsCompleted = 0
+    ''');
+    return Sqflite.firstIntValue(result) ?? 0;
+  }
+
+  Future<int> countCompleteTasks() async {
+    final result = await _db.rawQuery('''
+      SELECT COUNT(*) as completeCount 
+      FROM $tasksTable 
+      WHERE $taskColumnIsCompleted = 1
+    ''');
+    return Sqflite.firstIntValue(result) ?? 0;
+  }
 }

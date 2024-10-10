@@ -3,6 +3,7 @@ import 'package:task_sense/core/error/exceptions.dart';
 import 'package:task_sense/core/error/failures.dart';
 import 'package:task_sense/features/task_management/data/data_sources/task_list_local_data_source.dart';
 import 'package:task_sense/features/task_management/data/models/task_list_model.dart';
+import 'package:task_sense/features/task_management/data/models/task_list_with_count_model.dart';
 import 'package:task_sense/features/task_management/domain/repositories/task_list_repository.dart';
 
 class TaskListRepositoryImpl implements TaskListRepository {
@@ -21,7 +22,8 @@ class TaskListRepositoryImpl implements TaskListRepository {
   }
 
   @override
-  Future<Either<Failure, List<TaskListModel>>> getAllTaskLists() async {
+  Future<Either<Failure, List<TaskListWithCountModel>>>
+      getAllTaskLists() async {
     try {
       final taskLists = await _dataSource.getAllTaskLists();
       return Right(taskLists);

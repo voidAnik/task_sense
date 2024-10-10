@@ -49,4 +49,24 @@ class TaskRepositoryImpl implements TaskRepository {
       return Left(DatabaseFailure(error: e.error));
     }
   }
+
+  @override
+  Future<Either<Failure, int>> countIncompleteTasks() async {
+    try {
+      final count = await _dataSource.countIncompleteTasks();
+      return Right(count);
+    } catch (e) {
+      return Left(DatabaseFailure(error: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> countCompleteTasks() async {
+    try {
+      final count = await _dataSource.countCompleteTasks();
+      return Right(count);
+    } catch (e) {
+      return Left(DatabaseFailure(error: e.toString()));
+    }
+  }
 }

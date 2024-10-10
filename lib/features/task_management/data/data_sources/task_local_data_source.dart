@@ -7,17 +7,20 @@ abstract class TaskLocalDataSource {
   Future<List<TaskModel>> getAllTasks(int taskListId);
   Future<void> updateTask(TaskModel task);
   Future<void> deleteTask(int id);
+
+  Future<int> countIncompleteTasks();
+  Future<int> countCompleteTasks();
 }
 
 class TaskLocalDataSourceImpl implements TaskLocalDataSource {
-  final TaskDao dao;
+  final TaskDao _dao;
 
-  TaskLocalDataSourceImpl(this.dao);
+  TaskLocalDataSourceImpl(this._dao);
 
   @override
   Future<void> insertTask(TaskModel task) async {
     try {
-      await dao.insertTask(task);
+      await _dao.insertTask(task);
     } catch (e) {
       throw DatabaseException(error: e.toString());
     }
@@ -26,7 +29,7 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
   @override
   Future<List<TaskModel>> getAllTasks(int taskListId) async {
     try {
-      return await dao.getAllTasks(taskListId);
+      return await _dao.getAllTasks(taskListId);
     } catch (e) {
       throw DatabaseException(error: e.toString());
     }
@@ -35,7 +38,7 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
   @override
   Future<void> updateTask(TaskModel task) async {
     try {
-      await dao.updateTask(task);
+      await _dao.updateTask(task);
     } catch (e) {
       throw DatabaseException(error: e.toString());
     }
@@ -44,7 +47,25 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
   @override
   Future<void> deleteTask(int id) async {
     try {
-      await dao.deleteTask(id);
+      await _dao.deleteTask(id);
+    } catch (e) {
+      throw DatabaseException(error: e.toString());
+    }
+  }
+
+  @override
+  Future<int> countIncompleteTasks() async {
+    try {
+      return await _dao.countIncompleteTasks();
+    } catch (e) {
+      throw DatabaseException(error: e.toString());
+    }
+  }
+
+  @override
+  Future<int> countCompleteTasks() async {
+    try {
+      return await _dao.countCompleteTasks();
     } catch (e) {
       throw DatabaseException(error: e.toString());
     }
