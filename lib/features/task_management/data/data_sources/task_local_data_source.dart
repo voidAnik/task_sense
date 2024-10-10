@@ -1,15 +1,14 @@
 import 'package:task_sense/core/database/task_dao.dart';
 import 'package:task_sense/core/error/exceptions.dart';
 import 'package:task_sense/features/task_management/data/models/task_model.dart';
+import 'package:task_sense/features/task_management/domain/entities/task_count.dart';
 
 abstract class TaskLocalDataSource {
   Future<void> insertTask(TaskModel task);
   Future<List<TaskModel>> getAllTasks(int taskListId);
   Future<void> updateTask(TaskModel task);
   Future<void> deleteTask(int id);
-
-  Future<int> countIncompleteTasks();
-  Future<int> countCompleteTasks();
+  Future<TaskCount> countTasks();
 }
 
 class TaskLocalDataSourceImpl implements TaskLocalDataSource {
@@ -54,18 +53,9 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
   }
 
   @override
-  Future<int> countIncompleteTasks() async {
+  Future<TaskCount> countTasks() async {
     try {
-      return await _dao.countIncompleteTasks();
-    } catch (e) {
-      throw DatabaseException(error: e.toString());
-    }
-  }
-
-  @override
-  Future<int> countCompleteTasks() async {
-    try {
-      return await _dao.countCompleteTasks();
+      return await _dao.countTasks();
     } catch (e) {
       throw DatabaseException(error: e.toString());
     }

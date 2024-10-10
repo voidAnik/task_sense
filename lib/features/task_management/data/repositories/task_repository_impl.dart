@@ -3,6 +3,7 @@ import 'package:task_sense/core/error/exceptions.dart';
 import 'package:task_sense/core/error/failures.dart';
 import 'package:task_sense/features/task_management/data/data_sources/task_local_data_source.dart';
 import 'package:task_sense/features/task_management/data/models/task_model.dart';
+import 'package:task_sense/features/task_management/domain/entities/task_count.dart';
 import 'package:task_sense/features/task_management/domain/repositories/task_repository.dart';
 
 class TaskRepositoryImpl implements TaskRepository {
@@ -51,19 +52,9 @@ class TaskRepositoryImpl implements TaskRepository {
   }
 
   @override
-  Future<Either<Failure, int>> countIncompleteTasks() async {
+  Future<Either<Failure, TaskCount>> countTasks() async {
     try {
-      final count = await _dataSource.countIncompleteTasks();
-      return Right(count);
-    } catch (e) {
-      return Left(DatabaseFailure(error: e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, int>> countCompleteTasks() async {
-    try {
-      final count = await _dataSource.countCompleteTasks();
+      final count = await _dataSource.countTasks();
       return Right(count);
     } catch (e) {
       return Left(DatabaseFailure(error: e.toString()));

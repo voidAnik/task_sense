@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:task_sense/core/database/database_constants.dart';
 import 'package:task_sense/features/task_management/data/models/task_model.dart';
+import 'package:task_sense/features/task_management/domain/entities/task_count.dart';
 
 class TaskDao {
   final Database _db;
@@ -64,21 +65,19 @@ class TaskDao {
     return result.map((e) => TaskModel.fromJson(e)).toList();
   }
 
-  Future<int> countIncompleteTasks() async {
+  Future<TaskCount> countTasks() async {
     final result = await _db.rawQuery('''
-      SELECT COUNT(*) as incompleteCount 
-      FROM $tasksTable 
-      WHERE $taskColumnIsCompleted = 0
-    ''');
-    return Sqflite.firstIntValue(result) ?? 0;
-  }
+    SELECT 
+      SUM(CASE WHEN $taskColumnIsCompleted = 0 THEN 1 ELSE 0 END) AS incompleteCount,
+      SUM(CASE WHEN $taskColumnIsCompleted = 1 THEN 1 ELSE 0 END) AS completeCount
+    FROM $tasksTable
+  ''');
 
-  Future<int> countCompleteTasks() async {
-    final result = await _db.rawQuery('''
-      SELECT COUNT(*) as completeCount 
-      FROM $tasksTable 
-      WHERE $taskColumnIsCompleted = 1
-    ''');
-    return Sqflite.firstIntValue(result) ?? 0;
+    final data = result.isNotEmpty ? result.first : {};
+
+    return TaskCount(
+      completeCount: data['completeCount'] ?? 0,
+      incompleteCount: data['incompleteCount'] ?? 0,
+    );
   }
 }

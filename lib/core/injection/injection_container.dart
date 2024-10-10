@@ -9,12 +9,19 @@ import 'package:task_sense/features/sensor_tracker/domain/use_cases/get_accelero
 import 'package:task_sense/features/sensor_tracker/domain/use_cases/get_gyroscope_data.dart';
 import 'package:task_sense/features/sensor_tracker/presentation/blocs/accelerometer_cubit.dart';
 import 'package:task_sense/features/sensor_tracker/presentation/blocs/gyro_cubit.dart';
+import 'package:task_sense/features/task_management/data/data_sources/task_list_local_data_source.dart';
+import 'package:task_sense/features/task_management/data/data_sources/task_local_data_source.dart';
+import 'package:task_sense/features/task_management/data/repositories/task_list_repository_impl.dart';
+import 'package:task_sense/features/task_management/data/repositories/task_repository_impl.dart';
+import 'package:task_sense/features/task_management/domain/repositories/task_list_repository.dart';
+import 'package:task_sense/features/task_management/domain/repositories/task_repository.dart';
+import 'package:task_sense/features/task_management/domain/use_cases/get_task_count.dart';
+import 'package:task_sense/features/task_management/presentation/blocs/task_count_cubit.dart';
 
 final getIt = GetIt.instance;
 
 Future<void> init() async {
   //* Core
-
   getIt.registerLazySingleton(() => Sensors());
 
   //? database
@@ -25,18 +32,29 @@ Future<void> init() async {
     ..registerLazySingleton(() => TaskDao(db));
 
   //* data providers
+  getIt
+    ..registerLazySingleton<TaskListLocalDataSource>(
+        () => TaskListLocalDataSourceImpl(getIt()))
+    ..registerLazySingleton<TaskLocalDataSource>(
+        () => TaskLocalDataSourceImpl(getIt()));
 
   //* Repositories
-  getIt.registerLazySingleton<SensorRepository>(
-      () => SensorRepositoryImpl(getIt()));
+  getIt
+    ..registerLazySingleton<SensorRepository>(
+        () => SensorRepositoryImpl(getIt()))
+    ..registerLazySingleton<TaskListRepository>(
+        () => TaskListRepositoryImpl(getIt()))
+    ..registerLazySingleton<TaskRepository>(() => TaskRepositoryImpl(getIt()));
 
   //* Use Cases
   getIt
     ..registerLazySingleton(() => GetAccelerometerData(getIt()))
-    ..registerLazySingleton(() => GetGyroscopeData(getIt()));
+    ..registerLazySingleton(() => GetGyroscopeData(getIt()))
+    ..registerLazySingleton(() => GetTaskCount(getIt()));
 
   //* Blocs
   getIt
     ..registerFactory(() => AccelerometerCubit(getIt()))
-    ..registerFactory(() => GyroCubit(getIt()));
+    ..registerFactory(() => GyroCubit(getIt()))
+    ..registerFactory(() => TaskCountCubit(getIt()));
 }

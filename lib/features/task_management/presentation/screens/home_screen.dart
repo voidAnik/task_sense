@@ -1,28 +1,37 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_sense/config/theme/colors.dart';
 import 'package:task_sense/core/constants/assets.dart';
 import 'package:task_sense/core/extensions/context_extension.dart';
+import 'package:task_sense/core/injection/injection_container.dart';
+import 'package:task_sense/features/task_management/domain/entities/task_count.dart';
+import 'package:task_sense/features/task_management/presentation/blocs/task_count_cubit.dart';
 import 'package:task_sense/features/task_management/presentation/widgets/task_search_delegate.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String path = '/home_screen';
+
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: secondarySurfaceColor,
-      body: _createBody(context),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: context.theme.primaryColor,
-        onPressed: () {},
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
-        child: const Icon(
-          Icons.add,
-          size: 42,
-          color: Colors.white,
+    return BlocProvider(
+      create: (context) => getIt<TaskCountCubit>()..taskCount(),
+      child: Scaffold(
+        backgroundColor: secondarySurfaceColor,
+        body: _createBody(context),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: context.theme.primaryColor,
+          onPressed: () {},
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
+          child: const Icon(
+            Icons.add,
+            size: 42,
+            color: Colors.white,
+          ),
         ),
       ),
     );
@@ -65,10 +74,14 @@ class HomeScreen extends StatelessWidget {
                 'Zoyeb Ahmed',
                 style: context.textStyle.titleLarge,
               ),
-              Text(
-                '5 incomplete, 5 completed',
-                style: context.textStyle.bodyMedium!
-                    .copyWith(color: secondaryTextColor),
+              BlocBuilder<TaskCountCubit, TaskCount>(
+                builder: (context, taskCount) {
+                  return Text(
+                    '${taskCount.incompleteCount} incomplete, ${taskCount.completeCount} completed',
+                    style: context.textStyle.bodyMedium!
+                        .copyWith(color: secondaryTextColor),
+                  );
+                },
               ),
             ],
           ),
