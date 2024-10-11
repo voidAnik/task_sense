@@ -32,7 +32,7 @@ class DatabaseManager {
         $taskColumnId INTEGER PRIMARY KEY AUTOINCREMENT,
         $taskColumnTaskListId INTEGER NOT NULL,
         $taskColumnTaskName TEXT NOT NULL,
-        $taskColumnDueDate TEXT NOT NULL,
+        $taskColumnDueDate TEXT,
         $taskColumnNote TEXT,
         $taskColumnRemindMe INTEGER NOT NULL,
         $taskColumnIsCompleted INTEGER NOT NULL,

@@ -11,5 +11,12 @@ abstract class  LocaleKeys {
   static const alertContent = 'alertContent';
   static const ok = 'ok';
   static const sensorTrackerTitle = 'sensorTrackerTitle';
+  static const taskListsTitle = 'taskListsTitle';
+  static const addTask = 'addTask';
+  static const addTaskHint = 'addTaskHint';
+  static const taskTitleHint = 'taskTitleHint';
+  static const done = 'done';
+  static const cancel = 'cancel';
+  static const addNoteHint = 'addNoteHint';
 
 }

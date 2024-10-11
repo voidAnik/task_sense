@@ -8,5 +8,13 @@
   "alert": "Alert",
   "alertContent": "High movement detected on two axes!",
   "ok": "Okay",
-  "sensorTrackerTitle": "Sensor Tracker"
+  "sensorTrackerTitle": "Sensor Tracker",
+  "taskListsTitle": "Task Lists",
+  "addTask": "Add a Task",
+  "addTaskHint": "Add a task",
+  "taskTitleHint": "Untitled Task",
+  "done": "Done",
+  "cancel": "Cancel",
+  "addNoteHint": "Add a note.."
+
 }

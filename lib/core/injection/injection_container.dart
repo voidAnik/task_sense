@@ -15,10 +15,12 @@ import 'package:task_sense/features/task_management/data/repositories/task_list_
 import 'package:task_sense/features/task_management/data/repositories/task_repository_impl.dart';
 import 'package:task_sense/features/task_management/domain/repositories/task_list_repository.dart';
 import 'package:task_sense/features/task_management/domain/repositories/task_repository.dart';
+import 'package:task_sense/features/task_management/domain/use_cases/add_task.dart';
 import 'package:task_sense/features/task_management/domain/use_cases/add_task_list.dart';
 import 'package:task_sense/features/task_management/domain/use_cases/get_task_count.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_count_cubit.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_list_cubit.dart';
+import 'package:task_sense/features/task_management/presentation/blocs/task_modal_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -53,12 +55,14 @@ Future<void> init() async {
     ..registerLazySingleton(() => GetAccelerometerData(getIt()))
     ..registerLazySingleton(() => GetGyroscopeData(getIt()))
     ..registerLazySingleton(() => GetTaskCount(getIt()))
-    ..registerLazySingleton(() => AddTaskList(getIt()));
+    ..registerLazySingleton(() => AddTaskList(getIt()))
+    ..registerLazySingleton(() => AddTask(getIt()));
 
   //* Blocs
   getIt
     ..registerFactory(() => AccelerometerCubit(getIt()))
     ..registerFactory(() => GyroCubit(getIt()))
     ..registerFactory(() => TaskCountCubit(getIt()))
-    ..registerFactory(() => TaskCubit(getIt()));
+    ..registerFactory(() => TaskCubit(getIt()))
+    ..registerFactory(() => TaskModalCubit(getIt()));
 }

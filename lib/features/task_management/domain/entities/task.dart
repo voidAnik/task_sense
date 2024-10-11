@@ -2,7 +2,7 @@ class Task {
   final int? id;
   final int taskListId;
   final String taskName;
-  final DateTime dueDate;
+  final DateTime? dueDate;
   final String? note;
   final bool remindMe;
   final bool isCompleted;

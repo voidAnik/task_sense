@@ -1,7 +1,16 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_sense/config/theme/colors.dart';
+import 'package:task_sense/core/extensions/context_extension.dart';
+import 'package:task_sense/core/injection/injection_container.dart';
+import 'package:task_sense/core/language/generated/locale_keys.g.dart';
+import 'package:task_sense/features/task_management/presentation/blocs/task_modal_cubit.dart';
+import 'package:task_sense/features/task_management/presentation/widgets/date_picker_modal.dart';
 
 class AddTaskModal extends StatefulWidget {
-  const AddTaskModal({super.key});
+  const AddTaskModal({super.key, required this.taskListId});
+  final int taskListId;
 
   @override
   State<AddTaskModal> createState() => _AddTaskModalState();
@@ -24,56 +33,203 @@ class _AddTaskModalState extends State<AddTaskModal> {
     super.dispose();
   }
 
+  Future<void> _showDatePicker(BuildContext parentContext) async {
+    FocusScope.of(context).unfocus();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return DatePickerModal(onSelection: (selectedDate) {
+          parentContext.read<TaskModalCubit>().setDueDate(selectedDate);
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: 16.0,
-        right: 16.0,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 16.0,
-        top: 16.0,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
+    return BlocProvider(
+      create: (context) => getIt<TaskModalCubit>(),
+      child: Builder(builder: (context) {
+        context.read<TaskModalCubit>().taskListId = widget.taskListId;
+        return AnimatedPadding(
+          duration: const Duration(milliseconds: 500),
+          padding: EdgeInsets.only(
+            left: 16.0,
+            right: 16.0,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 16.0,
+            top: 16.0,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Expanded(
-                child: TextField(
-                  focusNode: _focusNode, // Auto-focus the text field
-                  decoration: const InputDecoration(
-                    hintText: "Enter your task",
-                    border: InputBorder.none, // Borderless text field
-                  ),
-                  autofocus: true,
+              _headerInput(context),
+              _noteInput(context),
+              const SizedBox(height: 20),
+              _createOptionButtons(context),
+            ],
+          ),
+        );
+      }),
+    );
+  }
+
+  BlocBuilder<TaskModalCubit, TaskModalState> _noteInput(BuildContext context) {
+    return BlocBuilder<TaskModalCubit, TaskModalState>(
+      builder: (context, state) {
+        if (state.openNote) {
+          return Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: TextField(
+              //controller: _noteController,
+              style: context.textStyle.bodyMedium,
+              decoration: InputDecoration(
+                hintText: LocaleKeys.addNoteHint.tr(),
+                hintStyle: context.textStyle.bodyMedium!.copyWith(
+                  color: hintTextColor,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.check), // Tick/To-do button
-                onPressed: () {},
-              ),
-            ],
+              maxLines: 3,
+              onChanged: (value) {
+                context.read<TaskModalCubit>().setNote(value);
+              },
+            ),
+          );
+        } else {
+          return Container();
+        }
+      },
+    );
+  }
+
+  Row _headerInput(BuildContext context) {
+    return Row(
+      children: [
+        Transform.scale(
+          scale: 1.3,
+          child: BlocBuilder<TaskModalCubit, TaskModalState>(
+            builder: (context, state) {
+              return Checkbox(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6.0),
+                ),
+                value: state.isCompleted,
+                side: const BorderSide(
+                  color: secondaryBorderColor,
+                ),
+                onChanged: (value) {
+                  context.read<TaskModalCubit>().toggleComplete();
+                },
+                fillColor: WidgetStateProperty.resolveWith((states) {
+                  if (states.contains(WidgetState.selected)) {
+                    return context
+                        .theme.primaryColor; // Checked background color
+                  }
+                  return secondarySurfaceColor; // Unchecked (inactive) background color
+                }),
+              );
+            },
           ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.notifications),
-                onPressed: () {},
+        ),
+        Expanded(
+          child: TextField(
+            focusNode: _focusNode,
+            // Auto-focus the text field
+            style: context.textStyle.bodyLarge,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: LocaleKeys.taskTitleHint.tr(),
+              hintStyle: context.textStyle.titleLarge!.copyWith(
+                color: hintTextColor,
               ),
-              IconButton(
-                icon: const Icon(Icons.note),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(Icons.calendar_today),
-                onPressed: () {},
-              ),
-            ],
+              focusedBorder: InputBorder.none,
+            ),
+            textInputAction: TextInputAction.done,
+            autofocus: true,
+            onChanged: (value) {
+              context.read<TaskModalCubit>().setTaskName(value);
+            },
           ),
-        ],
-      ),
+        ),
+        BlocBuilder<TaskModalCubit, TaskModalState>(
+          builder: (context, state) {
+            return IconButton(
+              icon: Icon(
+                Icons.check_circle,
+                color: state.taskName.isNotEmpty
+                    ? context.theme.primaryColor
+                    : disabledIconColor,
+                size: 28,
+              ),
+              onPressed: () {
+                if (state.taskName.isNotEmpty) {
+                  context.read<TaskModalCubit>().addTask();
+                  Navigator.pop(context);
+                }
+              },
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _createOptionButtons(BuildContext context) {
+    return BlocBuilder<TaskModalCubit, TaskModalState>(
+      builder: (context, state) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(
+              icon: Icon(
+                Icons.notifications_none,
+                color: state.remindMe
+                    ? context.theme.primaryColor
+                    : disabledIconColor,
+              ),
+              onPressed: () {
+                context.read<TaskModalCubit>().toggleRemindMe();
+              },
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.sticky_note_2_outlined,
+                color: state.openNote
+                    ? context.theme.primaryColor
+                    : disabledIconColor,
+              ),
+              onPressed: () {
+                context.read<TaskModalCubit>().toggleNote();
+              },
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.calendar_month_outlined,
+                color: state.dueDate != null
+                    ? context.theme.primaryColor
+                    : disabledIconColor,
+              ),
+              onPressed: () {
+                _showDatePicker(context);
+              },
+            ),
+            if (state.dueDate != null)
+              Text(
+                DateFormat('EEE, dd MMM').format(state.dueDate!),
+                style: context.textStyle.bodyLarge!.copyWith(
+                  color: context.theme.primaryColor,
+                ),
+              )
+          ],
+        );
+      },
     );
   }
 }

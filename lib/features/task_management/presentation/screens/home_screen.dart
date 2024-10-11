@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -9,7 +7,7 @@ import 'package:task_sense/core/extensions/context_extension.dart';
 import 'package:task_sense/core/injection/injection_container.dart';
 import 'package:task_sense/features/task_management/domain/entities/task_count.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_count_cubit.dart';
-import 'package:task_sense/features/task_management/presentation/screens/add_task_screen.dart';
+import 'package:task_sense/features/task_management/presentation/screens/task_screen.dart';
 import 'package:task_sense/features/task_management/presentation/widgets/task_search_delegate.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -27,7 +25,7 @@ class HomeScreen extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           backgroundColor: context.theme.primaryColor,
           onPressed: () {
-            context.push(AddTaskScreen.path);
+            context.push(TaskScreen.path);
           },
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
@@ -92,7 +90,6 @@ class HomeScreen extends StatelessWidget {
           const Spacer(),
           IconButton(
               onPressed: () {
-                log('on pressed');
                 showSearch(context: context, delegate: TaskSearchDelegate());
               },
               icon: Image.asset(
