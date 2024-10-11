@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,15 +9,30 @@ import 'package:task_sense/core/injection/injection_container.dart';
 import 'package:task_sense/core/language/generated/locale_keys.g.dart';
 import 'package:task_sense/features/task_management/data/models/task_list_model.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_cubit.dart';
+import 'package:task_sense/features/task_management/presentation/blocs/task_state.dart';
 import 'package:task_sense/features/task_management/presentation/widgets/add_task_modal.dart';
 import 'package:task_sense/features/task_management/presentation/widgets/circular_button.dart';
+import 'package:task_sense/features/task_management/presentation/widgets/task_list_widget.dart';
 
-class TaskScreen extends StatelessWidget {
+class TaskScreen extends StatefulWidget {
   static const String path = '/task_screen';
 
-  TaskScreen({super.key});
+  const TaskScreen({super.key});
 
+  @override
+  State<TaskScreen> createState() => _TaskScreenState();
+}
+
+class _TaskScreenState extends State<TaskScreen> {
+  final FocusNode _focusNode = FocusNode();
   final TextEditingController _titleController = TextEditingController();
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).requestFocus(_focusNode);
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +40,7 @@ class TaskScreen extends StatelessWidget {
       create: (context) => getIt<TaskCubit>(),
       child: Builder(builder: (context) {
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: secondarySurfaceColor,
           appBar: AppBar(
             backgroundColor: secondarySurfaceColor,
@@ -91,12 +109,30 @@ class TaskScreen extends StatelessWidget {
   }
 
   _createBody(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(8),
+    return Column(
+      children: [
+        _createTopWidget(context),
+        BlocBuilder<TaskCubit, TaskState>(
+          builder: (context, state) {
+            log('bloc rebuild $state');
+            if (context.read<TaskCubit>().taskListId != null) {
+              return const TaskListWidget();
+            }
+            return Container();
+          },
+        )
+      ],
+    );
+  }
+
+  Widget _createTopWidget(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
           TextField(
             controller: _titleController,
+            focusNode: _focusNode,
             style: context.textStyle.titleLarge,
             decoration: InputDecoration(
                 border: InputBorder.none,
@@ -114,7 +150,7 @@ class TaskScreen extends StatelessWidget {
                     created: DateTime.now(),
                   ));
             },
-          )
+          ),
         ],
       ),
     );

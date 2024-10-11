@@ -46,7 +46,7 @@ class TaskModalCubit extends Cubit<TaskModalState> {
     responseOrFailure.fold((failure) {
       log('task adding failed: $failure');
     }, (_) {
-      log('task added successfully');
+      log('task added successfully $task');
     });
   }
 }

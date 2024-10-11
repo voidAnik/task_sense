@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:task_sense/core/database/task_dao.dart';
 import 'package:task_sense/core/error/exceptions.dart';
 import 'package:task_sense/features/task_management/data/models/task_model.dart';
@@ -30,6 +32,7 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
     try {
       return await _dao.getAllTasks(taskListId);
     } catch (e) {
+      log('getting all task exception: $e');
       throw DatabaseException(error: e.toString());
     }
   }

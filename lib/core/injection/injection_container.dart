@@ -19,6 +19,7 @@ import 'package:task_sense/features/task_management/domain/use_cases/add_task.da
 import 'package:task_sense/features/task_management/domain/use_cases/add_task_list.dart';
 import 'package:task_sense/features/task_management/domain/use_cases/get_task_count.dart';
 import 'package:task_sense/features/task_management/domain/use_cases/get_task_list.dart';
+import 'package:task_sense/features/task_management/domain/use_cases/get_tasks.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_count_cubit.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_cubit.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_list_cubit.dart';
@@ -59,14 +60,15 @@ Future<void> init() async {
     ..registerLazySingleton(() => GetTaskCount(getIt()))
     ..registerLazySingleton(() => AddTaskList(getIt()))
     ..registerLazySingleton(() => AddTask(getIt()))
-    ..registerLazySingleton(() => GetTaskList(getIt()));
+    ..registerLazySingleton(() => GetTaskList(getIt()))
+    ..registerLazySingleton(() => GetTasks(getIt()));
 
   //* Blocs
   getIt
     ..registerFactory(() => AccelerometerCubit(getIt()))
     ..registerFactory(() => GyroCubit(getIt()))
     ..registerFactory(() => TaskCountCubit(getIt()))
-    ..registerFactory(() => TaskCubit(getIt()))
+    ..registerFactory(() => TaskCubit(getIt(), getIt()))
     ..registerFactory(() => TaskModalCubit(getIt()))
     ..registerFactory(() => TaskListCubit(getIt()));
 }

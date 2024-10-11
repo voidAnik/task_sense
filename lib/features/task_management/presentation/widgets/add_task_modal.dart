@@ -5,6 +5,7 @@ import 'package:task_sense/config/theme/colors.dart';
 import 'package:task_sense/core/extensions/context_extension.dart';
 import 'package:task_sense/core/injection/injection_container.dart';
 import 'package:task_sense/core/language/generated/locale_keys.g.dart';
+import 'package:task_sense/core/widgets/custom_checkbox.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_modal_cubit.dart';
 import 'package:task_sense/features/task_management/presentation/widgets/date_picker_modal.dart';
 
@@ -112,32 +113,11 @@ class _AddTaskModalState extends State<AddTaskModal> {
   Row _headerInput(BuildContext context) {
     return Row(
       children: [
-        Transform.scale(
-          scale: 1.2,
-          child: BlocBuilder<TaskModalCubit, TaskModalState>(
-            builder: (context, state) {
-              return Checkbox(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6.0),
-                ),
-                value: state.isCompleted,
-                side: const BorderSide(
-                  color: checkboxBorderColor,
-                ),
-                onChanged: (value) {
-                  context.read<TaskModalCubit>().toggleComplete();
-                },
-                fillColor: WidgetStateProperty.resolveWith((states) {
-                  if (states.contains(WidgetState.selected)) {
-                    return context
-                        .theme.primaryColor; // Checked background color
-                  }
-                  return secondarySurfaceColor; // Unchecked (inactive) background color
-                }),
-              );
+        CustomCheckbox(
+            onChange: (value) {
+              context.read<TaskModalCubit>().toggleComplete();
             },
-          ),
-        ),
+            initialValue: false),
         Expanded(
           child: TextField(
             focusNode: _focusNode,

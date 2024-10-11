@@ -9,4 +9,6 @@ abstract class TaskRepository {
   Future<Either<Failure, void>> updateTask(TaskModel task);
   Future<Either<Failure, void>> deleteTask(int id);
   Future<Either<Failure, TaskCount>> countTasks();
+  Stream<List<TaskModel>> getTaskStream(int taskListId);
+  void closeStream();
 }

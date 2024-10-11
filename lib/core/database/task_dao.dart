@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:sqflite/sqflite.dart';
 import 'package:task_sense/core/database/database_constants.dart';
 import 'package:task_sense/features/task_management/data/models/task_model.dart';
@@ -37,9 +39,10 @@ class TaskDao {
   Future<List<TaskModel>> getAllTasks(int taskListId) async {
     final result = await _db.query(
       tasksTable,
-      where: '$taskListColumnId = ?',
+      where: '$taskColumnTaskListId = ?',
       whereArgs: [taskListId],
     );
+    log('getting tasks for id: $taskListId result: $result');
     return result.map((e) => TaskModel.fromJson(e)).toList();
   }
 

@@ -17,7 +17,9 @@ class TaskModel extends Task {
       id: json[taskColumnId] as int?,
       taskListId: json[taskColumnTaskListId] as int,
       taskName: json[taskColumnTaskName] as String,
-      dueDate: DateTime.parse(json[taskColumnDueDate] as String),
+      dueDate: json[taskColumnDueDate] != null
+          ? DateTime.parse(json[taskColumnDueDate] as String)
+          : null,
       note: json[taskColumnNote] as String?,
       remindMe: json[taskColumnRemindMe] == 1,
       isCompleted: json[taskColumnIsCompleted] == 1,
@@ -34,5 +36,10 @@ class TaskModel extends Task {
       taskColumnRemindMe: remindMe ? 1 : 0,
       taskColumnIsCompleted: isCompleted ? 1 : 0,
     };
+  }
+
+  @override
+  String toString() {
+    return 'TaskModel{id: $id, taskListId: $taskListId, taskName: $taskName, dueDate: $dueDate, note: $note, remindMe: $remindMe, isCompleted: $isCompleted}';
   }
 }
