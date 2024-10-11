@@ -7,11 +7,14 @@ import 'package:task_sense/core/extensions/context_extension.dart';
 import 'package:task_sense/core/injection/injection_container.dart';
 import 'package:task_sense/core/widgets/error_widget.dart';
 import 'package:task_sense/core/widgets/loading_widget.dart';
+import 'package:task_sense/features/task_management/data/models/task_list_model.dart';
+import 'package:task_sense/features/task_management/data/models/task_list_with_count_model.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_list_cubit.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_state.dart';
 
 class TaskTitleListWidget extends StatelessWidget {
-  const TaskTitleListWidget({super.key});
+  const TaskTitleListWidget({super.key, required this.onTap});
+  final Function(TaskListModel) onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -26,38 +29,7 @@ class TaskTitleListWidget extends StatelessWidget {
                 shrinkWrap: true,
                 itemCount: taskList.length,
                 itemBuilder: (context, index) {
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    elevation: 0.1,
-                    shadowColor: Colors.black,
-                    color: Colors.white,
-                    child: ListTile(
-                      leading: ImageIcon(
-                        const AssetImage(Assets.iconsList),
-                        color: context.theme.primaryColor,
-                      ),
-                      title: Text(
-                        taskList[index].title,
-                      ),
-                      titleTextStyle: context.textStyle.titleSmall!
-                          .copyWith(color: secondaryTextColor),
-                      subtitle: Text(
-                        DateFormat('dd MMMM').format(taskList[index].created),
-                      ),
-                      subtitleTextStyle: context.textStyle.bodySmall!.copyWith(
-                        color: secondaryTextColor,
-                        fontSize: 10,
-                      ),
-                      trailing: Text(
-                        taskList[index].taskCount.toString(),
-                        style: context.textStyle.titleMedium!.copyWith(
-                          color: context.theme.primaryColor,
-                        ),
-                      ),
-                    ),
-                  );
+                  return _createListItem(context, taskList[index]);
                 }),
           );
         } else if (state is TaskError) {
@@ -65,6 +37,42 @@ class TaskTitleListWidget extends StatelessWidget {
         }
         return const LoadingWidget();
       }),
+    );
+  }
+
+  Card _createListItem(BuildContext context, TaskListWithCountModel taskList) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      elevation: 0.1,
+      shadowColor: Colors.black,
+      color: Colors.white,
+      child: ListTile(
+        onTap: () => onTap(taskList as TaskListModel),
+        leading: ImageIcon(
+          const AssetImage(Assets.iconsList),
+          color: context.theme.primaryColor,
+        ),
+        title: Text(
+          taskList.title,
+        ),
+        titleTextStyle:
+            context.textStyle.titleSmall!.copyWith(color: secondaryTextColor),
+        subtitle: Text(
+          DateFormat('dd MMMM').format(taskList.created),
+        ),
+        subtitleTextStyle: context.textStyle.bodySmall!.copyWith(
+          color: secondaryTextColor,
+          fontSize: 10,
+        ),
+        trailing: Text(
+          taskList.taskCount.toString(),
+          style: context.textStyle.titleMedium!.copyWith(
+            color: context.theme.primaryColor,
+          ),
+        ),
+      ),
     );
   }
 }

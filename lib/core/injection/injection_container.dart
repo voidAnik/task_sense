@@ -68,7 +68,7 @@ Future<void> init() async {
     ..registerFactory(() => AccelerometerCubit(getIt()))
     ..registerFactory(() => GyroCubit(getIt()))
     ..registerFactory(() => TaskCountCubit(getIt()))
-    ..registerFactory(() => TaskCubit(getIt(), getIt()))
+    ..registerFactory(() => TaskCubit(getIt(), getIt(), getIt()))
     ..registerFactory(() => TaskModalCubit(getIt()))
     ..registerFactory(() => TaskListCubit(getIt()));
 }

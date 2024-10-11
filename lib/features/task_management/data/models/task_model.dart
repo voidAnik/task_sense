@@ -38,6 +38,26 @@ class TaskModel extends Task {
     };
   }
 
+  TaskModel copyWith({
+    int? id,
+    int? taskListId,
+    String? taskName,
+    DateTime? dueDate,
+    String? note,
+    bool? remindMe,
+    bool? isCompleted,
+  }) {
+    return TaskModel(
+      id: id ?? this.id,
+      taskListId: taskListId ?? this.taskListId,
+      taskName: taskName ?? this.taskName,
+      dueDate: dueDate ?? this.dueDate,
+      note: note ?? this.note,
+      remindMe: remindMe ?? this.remindMe,
+      isCompleted: isCompleted ?? this.isCompleted,
+    );
+  }
+
   @override
   String toString() {
     return 'TaskModel{id: $id, taskListId: $taskListId, taskName: $taskName, dueDate: $dueDate, note: $note, remindMe: $remindMe, isCompleted: $isCompleted}';

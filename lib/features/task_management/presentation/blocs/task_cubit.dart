@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_sense/features/task_management/data/models/task_list_model.dart';
+import 'package:task_sense/features/task_management/data/models/task_model.dart';
+import 'package:task_sense/features/task_management/domain/use_cases/add_task.dart';
 import 'package:task_sense/features/task_management/domain/use_cases/add_task_list.dart';
 import 'package:task_sense/features/task_management/domain/use_cases/get_tasks.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_state.dart';
@@ -9,8 +11,10 @@ import 'package:task_sense/features/task_management/presentation/blocs/task_stat
 class TaskCubit extends Cubit<TaskState> {
   final AddTaskList _addTaskList;
   final GetTasks _getTasks;
+  final AddTask _addTask;
 
-  TaskCubit(this._addTaskList, this._getTasks) : super(TaskInitial());
+  TaskCubit(this._addTaskList, this._getTasks, this._addTask)
+      : super(TaskInitial());
 
   int? taskListId;
 
@@ -42,6 +46,15 @@ class TaskCubit extends Cubit<TaskState> {
     } else {
       emit(TaskError(error: 'taskListId is null or not found'));
     }
+  }
+
+  Future<void> addTask({required TaskModel task}) async {
+    final responseOrFailure = await _addTask(params: task);
+    responseOrFailure.fold((failure) {
+      log('task adding failed: $failure');
+    }, (_) {
+      log('task added successfully $task');
+    });
   }
 
   @override

@@ -26,7 +26,7 @@ class TaskListWidget extends StatelessWidget {
               shrinkWrap: true,
               itemCount: tasks.length,
               itemBuilder: (context, index) {
-                return _createListItem2(context, task: tasks[index]);
+                return _createListItem(context, task: tasks[index]);
               }),
         );
       } else if (state is TaskError) {
@@ -44,89 +44,50 @@ class TaskListWidget extends StatelessWidget {
       elevation: 0.1,
       shadowColor: Colors.black,
       color: Colors.white,
-      child: ListTile(
-        contentPadding: EdgeInsets.zero,
-        leading: CustomCheckbox(
-          onChange: (value) {},
-          initialValue: task.isCompleted,
-        ),
-        title: Text(
-          task.taskName,
-        ),
-        titleAlignment: ListTileTitleAlignment.center,
-        titleTextStyle:
-            context.textStyle.titleSmall!.copyWith(color: secondaryTextColor),
-        subtitle: task.dueDate != null
-            ? Row(
-                children: [
-                  const Icon(Icons.calendar_month_outlined),
-                  Text(
-                    DateFormat('dd MMMM').format(task.dueDate!),
-                  ),
-                ],
-              )
-            : null,
-        subtitleTextStyle: context.textStyle.bodySmall!.copyWith(
-          color: secondaryTextColor,
-          fontSize: 10,
-        ),
-        trailing: ToggleStar(
-          onChange: (bool value) {},
-        ),
-      ),
-    );
-  }
-
-  Card _createListItem2(BuildContext context, {required TaskModel task}) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      elevation: 0.1,
-      shadowColor: Colors.black,
-      color: Colors.white,
-      child: Container(
-        child: Row(
-          children: [
-            CustomCheckbox(
-              onChange: (value) {},
-              initialValue: task.isCompleted,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  task.taskName,
-                  style: context.textStyle.bodyMedium!,
+      child: Row(
+        children: [
+          CustomCheckbox(
+            onChange: (value) {
+              context
+                  .read<TaskCubit>()
+                  .addTask(task: task.copyWith(isCompleted: value));
+            },
+            initialValue: task.isCompleted,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                task.taskName,
+                style: context.textStyle.bodyMedium!,
+              ),
+              if (task.dueDate != null)
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.calendar_month_outlined,
+                      color: disabledIconColor,
+                      size: 12,
+                    ),
+                    const SizedBox(
+                      width: 2,
+                    ),
+                    Text(
+                      DateFormat('dd MMMM').format(task.dueDate!),
+                      style: context.textStyle.bodySmall!.copyWith(
+                        color: hintTextColor,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
                 ),
-                if (task.dueDate != null)
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.calendar_month_outlined,
-                        color: disabledIconColor,
-                        size: 12,
-                      ),
-                      const SizedBox(
-                        width: 2,
-                      ),
-                      Text(
-                        DateFormat('dd MMMM').format(task.dueDate!),
-                        style: context.textStyle.bodySmall!.copyWith(
-                          color: hintTextColor,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-              ],
-            ),
-            Spacer(),
-            ToggleStar(
-              onChange: (bool value) {},
-            ),
-          ],
-        ),
+            ],
+          ),
+          Spacer(),
+          ToggleStar(
+            onChange: (bool value) {},
+          ),
+        ],
       ),
     );
   }

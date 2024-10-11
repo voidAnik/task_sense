@@ -17,7 +17,9 @@ import 'package:task_sense/features/task_management/presentation/widgets/task_li
 class TaskScreen extends StatefulWidget {
   static const String path = '/task_screen';
 
-  const TaskScreen({super.key});
+  const TaskScreen({super.key, required this.taskList});
+
+  final TaskListModel? taskList;
 
   @override
   State<TaskScreen> createState() => _TaskScreenState();
@@ -28,16 +30,26 @@ class _TaskScreenState extends State<TaskScreen> {
   final TextEditingController _titleController = TextEditingController();
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      FocusScope.of(context).requestFocus(_focusNode);
-    });
+    if (widget.taskList == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        FocusScope.of(context).requestFocus(_focusNode);
+      });
+    } else {
+      _titleController.text = widget.taskList!.title;
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<TaskCubit>(),
+      create: (context) {
+        if (widget.taskList == null) {
+          return getIt<TaskCubit>();
+        } else {
+          return getIt<TaskCubit>()..taskListId = widget.taskList!.id;
+        }
+      },
       child: Builder(builder: (context) {
         return Scaffold(
           resizeToAvoidBottomInset: false,

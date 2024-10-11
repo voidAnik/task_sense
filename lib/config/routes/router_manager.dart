@@ -6,6 +6,7 @@ import 'package:task_sense/config/routes/navigator_observer.dart';
 import 'package:task_sense/features/sensor_tracker/presentation/screens/sensor_tracker_screen.dart';
 import 'package:task_sense/features/startup/presentation/screens/selection_screen.dart';
 import 'package:task_sense/features/startup/presentation/screens/splash_screen.dart';
+import 'package:task_sense/features/task_management/data/models/task_list_model.dart';
 import 'package:task_sense/features/task_management/presentation/screens/home_screen.dart';
 import 'package:task_sense/features/task_management/presentation/screens/task_screen.dart';
 
@@ -35,7 +36,9 @@ class RouterManager {
         ),
         GoRoute(
           path: TaskScreen.path,
-          builder: (context, state) => TaskScreen(),
+          builder: (context, state) => TaskScreen(
+            taskList: state.extra != null ? state.extra as TaskListModel : null,
+          ),
         ),
       ]);
 }

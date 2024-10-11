@@ -50,7 +50,11 @@ class HomeScreen extends StatelessWidget {
             color: secondaryBorderColor,
           ),
         ),
-        const TaskTitleListWidget(),
+        TaskTitleListWidget(
+          onTap: (taskList) {
+            context.push(TaskScreen.path, extra: taskList);
+          },
+        ),
       ],
     );
   }

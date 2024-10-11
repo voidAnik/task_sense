@@ -1,6 +1,6 @@
-import 'package:task_sense/features/task_management/domain/entities/task_list.dart';
+import 'package:task_sense/features/task_management/data/models/task_list_model.dart';
 
-class TaskListWithCountModel extends TaskList {
+class TaskListWithCountModel extends TaskListModel {
   final int taskCount;
 
   TaskListWithCountModel({
