@@ -8,7 +8,7 @@ const String tasksTable = 'tasks';
 // Columns for task lists
 const String taskListColumnId = 'id';
 const String taskListColumnTitle = 'title';
-const String taskListColumnDescription = 'description';
+const String taskListColumnCreated = 'created';
 
 // Columns for tasks
 const String taskColumnId = 'id';

@@ -9,6 +9,7 @@ import 'package:task_sense/features/task_management/domain/entities/task_count.d
 import 'package:task_sense/features/task_management/presentation/blocs/task_count_cubit.dart';
 import 'package:task_sense/features/task_management/presentation/screens/task_screen.dart';
 import 'package:task_sense/features/task_management/presentation/widgets/task_search_delegate.dart';
+import 'package:task_sense/features/task_management/presentation/widgets/task_title_list_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String path = '/home_screen';
@@ -20,9 +21,8 @@ class HomeScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => getIt<TaskCountCubit>()..taskCount(),
       child: Scaffold(
-        backgroundColor: secondarySurfaceColor,
         body: _createBody(context),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: FloatingActionButton.small(
           backgroundColor: context.theme.primaryColor,
           onPressed: () {
             context.push(TaskScreen.path);
@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
           child: const Icon(
             Icons.add,
-            size: 42,
+            size: 24,
             color: Colors.white,
           ),
         ),
@@ -47,9 +47,10 @@ class HomeScreen extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 8),
           child: Divider(
             height: 2,
-            color: borderColor,
+            color: secondaryBorderColor,
           ),
         ),
+        const TaskTitleListWidget(),
       ],
     );
   }
@@ -75,6 +76,9 @@ class HomeScreen extends StatelessWidget {
               Text(
                 'Zoyeb Ahmed',
                 style: context.textStyle.titleLarge,
+              ),
+              const SizedBox(
+                height: 4,
               ),
               BlocBuilder<TaskCountCubit, TaskCount>(
                 builder: (context, taskCount) {

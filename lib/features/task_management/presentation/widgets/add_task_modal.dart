@@ -113,7 +113,7 @@ class _AddTaskModalState extends State<AddTaskModal> {
     return Row(
       children: [
         Transform.scale(
-          scale: 1.3,
+          scale: 1.2,
           child: BlocBuilder<TaskModalCubit, TaskModalState>(
             builder: (context, state) {
               return Checkbox(
@@ -122,7 +122,7 @@ class _AddTaskModalState extends State<AddTaskModal> {
                 ),
                 value: state.isCompleted,
                 side: const BorderSide(
-                  color: secondaryBorderColor,
+                  color: checkboxBorderColor,
                 ),
                 onChanged: (value) {
                   context.read<TaskModalCubit>().toggleComplete();
@@ -142,12 +142,15 @@ class _AddTaskModalState extends State<AddTaskModal> {
           child: TextField(
             focusNode: _focusNode,
             // Auto-focus the text field
-            style: context.textStyle.bodyLarge,
+            style: context.textStyle.bodyLarge!.copyWith(
+              fontSize: 18,
+            ),
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: LocaleKeys.taskTitleHint.tr(),
-              hintStyle: context.textStyle.titleLarge!.copyWith(
+              hintStyle: context.textStyle.bodyLarge!.copyWith(
                 color: hintTextColor,
+                fontSize: 18,
               ),
               focusedBorder: InputBorder.none,
             ),
@@ -166,7 +169,6 @@ class _AddTaskModalState extends State<AddTaskModal> {
                 color: state.taskName.isNotEmpty
                     ? context.theme.primaryColor
                     : disabledIconColor,
-                size: 28,
               ),
               onPressed: () {
                 if (state.taskName.isNotEmpty) {

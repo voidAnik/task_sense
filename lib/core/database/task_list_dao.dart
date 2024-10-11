@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:sqflite/sqflite.dart';
 import 'package:task_sense/core/database/database_constants.dart';
 import 'package:task_sense/features/task_management/data/models/task_list_model.dart';
@@ -23,12 +25,12 @@ class TaskListDao {
 
   Future<List<TaskListWithCountModel>> getTaskListsWithCount() async {
     final result = await _db.rawQuery('''
-      SELECT tl.id, tl.title, tl.description, COUNT(t.id) as task_count
+      SELECT tl.id, tl.title, tl.created, COUNT(t.id) as task_count
       FROM $taskListsTable tl
       LEFT JOIN $tasksTable t ON tl.id = t.task_list_id
       GROUP BY tl.id
     ''');
-
+    log('result: $result');
     return result.map((e) => TaskListWithCountModel.fromJson(e)).toList();
   }
 

@@ -23,7 +23,7 @@ class DatabaseManager {
       CREATE TABLE $taskListsTable (
         $taskListColumnId INTEGER PRIMARY KEY AUTOINCREMENT,
         $taskListColumnTitle TEXT NOT NULL,
-        $taskListColumnDescription TEXT
+        $taskListColumnCreated TEXT
       )
     ''');
 

@@ -6,7 +6,7 @@ import 'package:task_sense/core/extensions/context_extension.dart';
 import 'package:task_sense/core/injection/injection_container.dart';
 import 'package:task_sense/core/language/generated/locale_keys.g.dart';
 import 'package:task_sense/features/task_management/data/models/task_list_model.dart';
-import 'package:task_sense/features/task_management/presentation/blocs/task_list_cubit.dart';
+import 'package:task_sense/features/task_management/presentation/blocs/task_cubit.dart';
 import 'package:task_sense/features/task_management/presentation/widgets/add_task_modal.dart';
 import 'package:task_sense/features/task_management/presentation/widgets/circular_button.dart';
 
@@ -46,7 +46,7 @@ class TaskScreen extends StatelessWidget {
           onTap: () {
             if (parentContext.read<TaskCubit>().taskListId != null) {
               showModalBottomSheet(
-                backgroundColor: parentContext.theme.colorScheme.surface,
+                backgroundColor: Colors.white,
                 context: parentContext,
                 isScrollControlled: true,
                 shape: const RoundedRectangleBorder(

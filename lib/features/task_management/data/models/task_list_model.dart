@@ -19,7 +19,7 @@ class TaskListModel extends TaskList {
     return {
       'id': id,
       'title': title,
-      'description': created.toIso8601String(),
+      'created': created.toIso8601String(),
     };
   }
 
