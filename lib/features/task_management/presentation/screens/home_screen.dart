@@ -47,7 +47,7 @@ class HomeScreen extends StatelessWidget {
           child: Scaffold(
             resizeToAvoidBottomInset: false,
             body: _createBody(context),
-            floatingActionButton: FloatingActionButton.small(
+            floatingActionButton: FloatingActionButton(
               backgroundColor: context.theme.primaryColor,
               onPressed: () {
                 _navigateToTaskScreen(context, null);
@@ -56,7 +56,7 @@ class HomeScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(32)),
               child: const Icon(
                 Icons.add,
-                size: 24,
+                size: 32,
                 color: Colors.white,
               ),
             ),

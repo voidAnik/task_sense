@@ -100,7 +100,7 @@ class _TaskScreenState extends State<TaskScreen> {
                     icon: Icon(
                       Icons.add,
                       color: Colors.white,
-                      size: 24,
+                      size: 28,
                     ),
                   ),
                   const SizedBox(
@@ -108,7 +108,7 @@ class _TaskScreenState extends State<TaskScreen> {
                   ),
                   Text(
                     LocaleKeys.addTask.tr(),
-                    style: parentContext.textStyle.titleSmall!
+                    style: parentContext.textStyle.titleMedium!
                         .copyWith(color: secondaryTextColor),
                   ),
                 ],

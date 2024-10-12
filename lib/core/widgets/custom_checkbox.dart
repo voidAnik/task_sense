@@ -23,7 +23,7 @@ class _CustomCheckboxState extends State<CustomCheckbox> {
   @override
   Widget build(BuildContext context) {
     return Transform.scale(
-      scale: 1.2,
+      scale: 1.3,
       child: Checkbox(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5.0),

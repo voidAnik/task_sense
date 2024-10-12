@@ -149,6 +149,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 color: state.taskName.isNotEmpty
                     ? context.theme.primaryColor
                     : disabledIconColor,
+                size: 32,
               ),
               onPressed: () {
                 if (state.taskName.isNotEmpty) {
