@@ -33,16 +33,6 @@ class TaskListRepositoryImpl implements TaskListRepository {
   }
 
   @override
-  Future<Either<Failure, void>> updateTaskList(TaskListModel taskList) async {
-    try {
-      await _dataSource.updateTaskList(taskList);
-      return const Right(null);
-    } on DatabaseException catch (e) {
-      return Left(DatabaseFailure(error: e.error));
-    }
-  }
-
-  @override
   Future<Either<Failure, void>> deleteTaskList(int id) async {
     try {
       await _dataSource.deleteTaskList(id);

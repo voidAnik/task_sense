@@ -6,6 +6,5 @@ import 'package:task_sense/features/task_management/data/models/task_list_with_c
 abstract class TaskListRepository {
   Future<Either<Failure, int>> insertTaskList(TaskListModel taskList);
   Future<Either<Failure, List<TaskListWithCountModel>>> getAllTaskLists();
-  Future<Either<Failure, void>> updateTaskList(TaskListModel taskList);
   Future<Either<Failure, void>> deleteTaskList(int id);
 }

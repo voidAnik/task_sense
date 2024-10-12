@@ -6,7 +6,6 @@ import 'package:task_sense/features/task_management/data/models/task_list_with_c
 abstract class TaskListLocalDataSource {
   Future<int> insertTaskList(TaskListModel taskList);
   Future<List<TaskListWithCountModel>> getAllTaskLists();
-  Future<void> updateTaskList(TaskListModel taskList);
   Future<void> deleteTaskList(int id);
 }
 
@@ -28,15 +27,6 @@ class TaskListLocalDataSourceImpl implements TaskListLocalDataSource {
   Future<List<TaskListWithCountModel>> getAllTaskLists() async {
     try {
       return await dao.getTaskListsWithCount();
-    } catch (e) {
-      throw DatabaseException(error: e.toString());
-    }
-  }
-
-  @override
-  Future<void> updateTaskList(TaskListModel taskList) async {
-    try {
-      await dao.updateTaskList(taskList);
     } catch (e) {
       throw DatabaseException(error: e.toString());
     }

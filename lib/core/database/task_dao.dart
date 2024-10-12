@@ -18,15 +18,6 @@ class TaskDao {
     );
   }
 
-  Future<void> updateTask(TaskModel task) async {
-    await _db.update(
-      tasksTable,
-      task.toJson(),
-      where: '$taskColumnId = ?',
-      whereArgs: [task.id],
-    );
-  }
-
   Future<void> deleteTask(int id) async {
     await _db.delete(
       tasksTable,
@@ -43,28 +34,6 @@ class TaskDao {
       whereArgs: [taskListId],
     );
     log('getting tasks for id: $taskListId result: $result');
-    return result.map((e) => TaskModel.fromJson(e)).toList();
-  }
-
-  Future<TaskModel?> getTaskById(int id) async {
-    final result = await _db.query(
-      tasksTable,
-      where: '$taskColumnId = ?',
-      whereArgs: [id],
-    );
-    if (result.isNotEmpty) {
-      return TaskModel.fromJson(result.first);
-    }
-    return null;
-  }
-
-  Future<List<TaskModel>> getTasksByStatus(
-      int taskListId, bool isCompleted) async {
-    final result = await _db.query(
-      tasksTable,
-      where: '$taskListColumnId = ? AND $taskColumnIsCompleted = ?',
-      whereArgs: [taskListId, isCompleted ? 1 : 0],
-    );
     return result.map((e) => TaskModel.fromJson(e)).toList();
   }
 
