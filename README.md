@@ -13,6 +13,7 @@
     - [Dependency Injection](#dependency-injection)
     - [Localization](#localization)
     - [Flavor Configuration](#flavor-configuration)
+    - [Unit Test Coverage](#unit-test-coverage)
 6. [Installation](#installation)
 7. [Running the App](#running-the-app)
     - [With Android Studio](#with-android-studio)
@@ -75,6 +76,9 @@ Task Sense is a Flutter-based mobile application designed to help users manage t
 
 ### Flavor Configuration
 - **Different App Flavors**: Configured for development and production environments.
+
+### Unit Test Coverage
+- **Unit Tests**: Implemented to ensure the reliability and robustness of the app’s functionality, covering key features and business logic.
 
 
 ## Installation
