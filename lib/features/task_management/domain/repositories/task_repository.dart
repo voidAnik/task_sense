@@ -6,7 +6,6 @@ import 'package:task_sense/features/task_management/domain/entities/task_count.d
 abstract class TaskRepository {
   Future<Either<Failure, void>> insertTask(TaskModel task);
   Future<Either<Failure, List<TaskModel>>> getAllTasks(int taskListId);
-  Future<Either<Failure, void>> updateTask(TaskModel task);
   Future<Either<Failure, void>> deleteTask(int id, int listId);
   Future<Either<Failure, TaskCount>> countTasks();
   Stream<List<TaskModel>> getTaskStream(int taskListId);

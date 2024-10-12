@@ -8,7 +8,6 @@ import 'package:task_sense/features/task_management/domain/entities/task_count.d
 abstract class TaskLocalDataSource {
   Future<void> insertTask(TaskModel task);
   Future<List<TaskModel>> getAllTasks(int taskListId);
-  Future<void> updateTask(TaskModel task);
   Future<void> deleteTask(int id);
   Future<TaskCount> countTasks();
 }
@@ -33,15 +32,6 @@ class TaskLocalDataSourceImpl implements TaskLocalDataSource {
       return await _dao.getAllTasks(taskListId);
     } catch (e) {
       log('getting all task exception: $e');
-      throw DatabaseException(error: e.toString());
-    }
-  }
-
-  @override
-  Future<void> updateTask(TaskModel task) async {
-    try {
-      await _dao.updateTask(task);
-    } catch (e) {
       throw DatabaseException(error: e.toString());
     }
   }
