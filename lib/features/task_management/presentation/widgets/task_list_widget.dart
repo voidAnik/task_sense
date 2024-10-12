@@ -12,7 +12,8 @@ import 'package:task_sense/features/task_management/presentation/blocs/task_cubi
 import 'package:task_sense/features/task_management/presentation/blocs/task_state.dart';
 
 class TaskListWidget extends StatelessWidget {
-  const TaskListWidget({super.key});
+  const TaskListWidget({super.key, required this.onPressed});
+  final Function(TaskModel task) onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -36,58 +37,72 @@ class TaskListWidget extends StatelessWidget {
     });
   }
 
-  Card _createListItem(BuildContext context, {required TaskModel task}) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      elevation: 0.1,
-      shadowColor: Colors.black,
-      color: Colors.white,
-      child: Row(
-        children: [
-          CustomCheckbox(
-            onChange: (value) {
-              context
-                  .read<TaskCubit>()
-                  .addTask(task: task.copyWith(isCompleted: value));
-            },
-            initialValue: task.isCompleted,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _createListItem(BuildContext context, {required TaskModel task}) {
+    return GestureDetector(
+      onTap: () => onPressed(task),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        elevation: 0.1,
+        shadowColor: Colors.black,
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
             children: [
-              Text(
-                task.taskName,
-                style: context.textStyle.bodyMedium!,
+              CustomCheckbox(
+                onChange: (value) {
+                  context
+                      .read<TaskCubit>()
+                      .addTask(task: task.copyWith(isCompleted: value));
+                },
+                initialValue: task.isCompleted,
               ),
-              if (task.dueDate != null)
-                Row(
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(
-                      Icons.calendar_month_outlined,
-                      color: disabledIconColor,
-                      size: 12,
-                    ),
-                    const SizedBox(
-                      width: 2,
-                    ),
                     Text(
-                      DateFormat('dd MMMM').format(task.dueDate!),
-                      style: context.textStyle.bodySmall!.copyWith(
-                        color: hintTextColor,
-                        fontSize: 12,
-                      ),
+                      task.taskName,
+                      style: context.textStyle.bodyMedium!,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
+                    if (task.dueDate != null)
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.calendar_month_outlined,
+                            color: disabledIconColor,
+                            size: 12,
+                          ),
+                          const SizedBox(
+                            width: 2,
+                          ),
+                          Text(
+                            DateFormat('dd MMMM').format(task.dueDate!),
+                            style: context.textStyle.bodySmall!.copyWith(
+                              color: hintTextColor,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
                   ],
                 ),
+              ),
+              ToggleStar(
+                isMarked: task.isMarked,
+                onChange: (bool value) {
+                  context
+                      .read<TaskCubit>()
+                      .addTask(task: task.copyWith(isMarked: value));
+                },
+              ),
             ],
           ),
-          Spacer(),
-          ToggleStar(
-            onChange: (bool value) {},
-          ),
-        ],
+        ),
       ),
     );
   }

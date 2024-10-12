@@ -1,8 +1,7 @@
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:task_sense/config/theme/colors.dart';
 import 'package:task_sense/core/extensions/context_extension.dart';
 import 'package:task_sense/core/injection/injection_container.dart';
@@ -53,9 +52,7 @@ class _TaskScreenState extends State<TaskScreen> {
       child: Builder(builder: (context) {
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: secondarySurfaceColor,
           appBar: AppBar(
-            backgroundColor: secondarySurfaceColor,
             title: Text(LocaleKeys.taskListsTitle.tr()),
           ),
           body: _createBody(context),
@@ -86,6 +83,8 @@ class _TaskScreenState extends State<TaskScreen> {
                   taskListId: parentContext.read<TaskCubit>().taskListId!,
                 ),
               );
+            } else {
+              _showWarningSnackBar(context, 'No task tile found!');
             }
           },
           child: Material(
@@ -126,9 +125,14 @@ class _TaskScreenState extends State<TaskScreen> {
         _createTopWidget(context),
         BlocBuilder<TaskCubit, TaskState>(
           builder: (context, state) {
-            log('bloc rebuild $state');
             if (context.read<TaskCubit>().taskListId != null) {
-              return const TaskListWidget();
+              return TaskListWidget(
+                onPressed: (task) {
+                  context.push(
+                      '${TaskScreen.path}?id=${context.read<TaskCubit>().taskListId!}',
+                      extra: task);
+                },
+              );
             }
             return Container();
           },
@@ -166,5 +170,36 @@ class _TaskScreenState extends State<TaskScreen> {
         ],
       ),
     );
+  }
+
+  void _showWarningSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Row(
+        children: [
+          const Icon(
+            Icons.warning,
+            color: Colors.white,
+          ),
+          const SizedBox(
+            width: 8,
+          ),
+          Text(
+            message,
+            style: context.textStyle.titleMedium!
+                .copyWith(color: Colors.white), // Text color
+          ),
+        ],
+      ),
+      backgroundColor: Colors.deepOrangeAccent,
+      behavior: SnackBarBehavior.floating,
+      duration: const Duration(seconds: 2),
+      action: SnackBarAction(
+        label: 'DISMISS',
+        textColor: Colors.white,
+        onPressed: () {},
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

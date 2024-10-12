@@ -36,6 +36,7 @@ class DatabaseManager {
         $taskColumnNote TEXT,
         $taskColumnRemindMe INTEGER NOT NULL,
         $taskColumnIsCompleted INTEGER NOT NULL,
+        $taskColumnIsMarked INTEGER NOT NULL,
         FOREIGN KEY ($taskColumnTaskListId) REFERENCES $taskListsTable($taskListColumnId) ON DELETE CASCADE
       )
     ''');

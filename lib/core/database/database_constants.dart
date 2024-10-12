@@ -18,3 +18,4 @@ const String taskColumnDueDate = 'due_date';
 const String taskColumnNote = 'note';
 const String taskColumnRemindMe = 'remind_me';
 const String taskColumnIsCompleted = 'is_completed';
+const String taskColumnIsMarked = 'is_marked';

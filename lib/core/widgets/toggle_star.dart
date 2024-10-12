@@ -4,15 +4,23 @@ class ToggleStar extends StatefulWidget {
   const ToggleStar({
     super.key,
     required this.onChange,
+    required this.isMarked,
   });
   final Function(bool value) onChange;
+  final bool isMarked;
 
   @override
   State<ToggleStar> createState() => _ToggleStarState();
 }
 
 class _ToggleStarState extends State<ToggleStar> {
-  bool isFav = false;
+  late bool isFav;
+  @override
+  void initState() {
+    isFav = widget.isMarked;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return IconButton(

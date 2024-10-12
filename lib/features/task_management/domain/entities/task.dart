@@ -6,6 +6,7 @@ class Task {
   final String? note;
   final bool remindMe;
   final bool isCompleted;
+  final bool isMarked;
 
   Task({
     this.id,
@@ -15,5 +16,6 @@ class Task {
     this.note,
     this.remindMe = false,
     this.isCompleted = false,
+    this.isMarked = false,
   });
 }

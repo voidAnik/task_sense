@@ -10,6 +10,7 @@ class TaskModel extends Task {
     super.note,
     super.remindMe,
     super.isCompleted,
+    super.isMarked,
   });
 
   factory TaskModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +24,7 @@ class TaskModel extends Task {
       note: json[taskColumnNote] as String?,
       remindMe: json[taskColumnRemindMe] == 1,
       isCompleted: json[taskColumnIsCompleted] == 1,
+      isMarked: json[taskColumnIsMarked] == 1,
     );
   }
 
@@ -35,6 +37,7 @@ class TaskModel extends Task {
       taskColumnNote: note,
       taskColumnRemindMe: remindMe ? 1 : 0,
       taskColumnIsCompleted: isCompleted ? 1 : 0,
+      taskColumnIsMarked: isMarked ? 1 : 0,
     };
   }
 
@@ -46,6 +49,7 @@ class TaskModel extends Task {
     String? note,
     bool? remindMe,
     bool? isCompleted,
+    bool? isMarked,
   }) {
     return TaskModel(
       id: id ?? this.id,
@@ -55,11 +59,12 @@ class TaskModel extends Task {
       note: note ?? this.note,
       remindMe: remindMe ?? this.remindMe,
       isCompleted: isCompleted ?? this.isCompleted,
+      isMarked: isMarked ?? this.isMarked,
     );
   }
 
   @override
   String toString() {
-    return 'TaskModel{id: $id, taskListId: $taskListId, taskName: $taskName, dueDate: $dueDate, note: $note, remindMe: $remindMe, isCompleted: $isCompleted}';
+    return 'TaskModel{id: $id, taskListId: $taskListId, taskName: $taskName, dueDate: $dueDate, note: $note, remindMe: $remindMe, isCompleted: $isCompleted, isMarked: $isMarked}';
   }
 }
