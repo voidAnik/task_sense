@@ -38,20 +38,43 @@ class RouterManager {
         ),
         GoRoute(
           path: TaskScreen.path,
-          builder: (context, state) => TaskScreen(
-            taskList: state.extra != null ? state.extra as TaskListModel : null,
+          pageBuilder: (context, state) => createSlideTransitionPage(
+            child: TaskScreen(
+              taskList:
+                  state.extra != null ? state.extra as TaskListModel : null,
+            ),
           ),
         ),
         GoRoute(
             path: TaskDetailsScreen.path,
-            builder: (context, state) {
+            pageBuilder: (context, state) {
               final int id = int.parse(state.uri.queryParameters['id']!);
-              return TaskDetailsScreen(
-                task: state.extra as TaskModel,
-                taskListId: id,
-              );
+              return createSlideTransitionPage(
+                  child: TaskDetailsScreen(
+                      task: state.extra as TaskModel, taskListId: id));
             }),
       ]);
+
+  static CustomTransitionPage createSlideTransitionPage(
+      {required Widget child}) {
+    return CustomTransitionPage(
+      child: child,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.easeInOut;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var offsetAnimation = animation.drive(tween);
+
+        return SlideTransition(
+          position: offsetAnimation,
+          child: child,
+        );
+      },
+    );
+  }
 }
 
 class FlavorBanner extends StatelessWidget {

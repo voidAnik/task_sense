@@ -37,30 +37,32 @@ class HomeScreen extends StatelessWidget {
           create: (context) => getIt<GetDueTasksCubit>()..fetchDueTasks(),
         ),
       ],
-      child: BlocListener<GetDueTasksCubit, List<TaskModel>>(
-        listener: (context, dueTasks) {
-          if (dueTasks.isNotEmpty) {
-            _showDueTasksAlert(context, dueTasks);
-          }
-        },
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: _createBody(context),
-          floatingActionButton: FloatingActionButton.small(
-            backgroundColor: context.theme.primaryColor,
-            onPressed: () {
-              _navigateToTaskScreen(context, null);
-            },
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
-            child: const Icon(
-              Icons.add,
-              size: 24,
-              color: Colors.white,
+      child: Builder(builder: (context) {
+        return BlocListener<GetDueTasksCubit, List<TaskModel>>(
+          listener: (context, dueTasks) {
+            if (dueTasks.isNotEmpty) {
+              _showDueTasksAlert(context, dueTasks);
+            }
+          },
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: _createBody(context),
+            floatingActionButton: FloatingActionButton.small(
+              backgroundColor: context.theme.primaryColor,
+              onPressed: () {
+                _navigateToTaskScreen(context, null);
+              },
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32)),
+              child: const Icon(
+                Icons.add,
+                size: 24,
+                color: Colors.white,
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 

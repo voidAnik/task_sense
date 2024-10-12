@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,7 +31,6 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
 
   @override
   void initState() {
-    log('got id: ${widget.taskListId}');
     if (widget.task.note != null) {
       _noteController.text = widget.task.note!;
     }

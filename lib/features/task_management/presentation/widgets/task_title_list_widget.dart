@@ -17,17 +17,19 @@ class TaskTitleListWidget extends StatelessWidget {
     return BlocBuilder<TaskListCubit, TaskState>(builder: (context, state) {
       if (state is TaskListLoaded) {
         final taskList = state.taskList;
-        return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16),
-          child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: taskList.length,
-              itemBuilder: (context, index) {
-                return TaskListItemWidget(
-                  onTap: onTap,
-                  taskList: taskList[index],
-                );
-              }),
+        return Expanded(
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: taskList.length,
+                itemBuilder: (context, index) {
+                  return TaskListItemWidget(
+                    onTap: onTap,
+                    taskList: taskList[index],
+                  );
+                }),
+          ),
         );
       } else if (state is TaskError) {
         return ErrorMessage(error: state.error);

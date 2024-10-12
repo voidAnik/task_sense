@@ -48,7 +48,6 @@ class TaskDao {
       whereArgs: [todayStart.toIso8601String(), todayEnd.toIso8601String()],
     );
 
-    log('Tasks due today: $result');
     return result.map((e) => TaskModel.fromJson(e)).toList();
   }
 

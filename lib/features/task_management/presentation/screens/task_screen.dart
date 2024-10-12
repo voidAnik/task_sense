@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,6 +14,7 @@ import 'package:task_sense/features/task_management/presentation/screens/task_de
 import 'package:task_sense/features/task_management/presentation/widgets/add_task_bottom_sheet.dart';
 import 'package:task_sense/features/task_management/presentation/widgets/circular_button.dart';
 import 'package:task_sense/features/task_management/presentation/widgets/task_list_widget.dart';
+import 'package:task_sense/features/task_management/presentation/widgets/task_progress_indicator.dart';
 
 class TaskScreen extends StatefulWidget {
   static const String path = '/task_screen';
@@ -121,25 +120,6 @@ class _TaskScreenState extends State<TaskScreen> {
     );
   }
 
-  void _showAddTaskModal(BuildContext parentContext) {
-    showModalBottomSheet<bool>(
-      backgroundColor: Colors.white,
-      context: parentContext,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => AddTaskBottomSheet(
-        taskListId: parentContext.read<TaskCubit>().taskListId!,
-      ),
-    ).then((result) {
-      log('i am here result: $result');
-      if (result != null) {
-        _showSuccessSnackBar(context, LocaleKeys.taskAddSuccessSnack.tr());
-      }
-    });
-  }
-
   _createBody(BuildContext context) {
     return Column(
       children: [
@@ -194,16 +174,53 @@ class _TaskScreenState extends State<TaskScreen> {
                 fillColor: secondarySurfaceColor),
             textInputAction: TextInputAction.done,
             onSubmitted: (value) {
-              context.read<TaskCubit>().addTaskList(
-                      taskTitle: TaskListModel(
-                    title: value,
-                    created: DateTime.now(),
-                  ));
+              if (value.isNotEmpty) {
+                context.read<TaskCubit>().addTaskList(
+                        taskTitle: TaskListModel(
+                      title: value,
+                      created: DateTime.now(),
+                    ));
+              }
             },
           ),
+          BlocBuilder<TaskCubit, TaskState>(
+            builder: (context, state) {
+              if (state is TaskLoaded) {
+                int completedCount =
+                    state.tasks.where((task) => task.isCompleted).length;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: TaskProgressIndicator(
+                      color: context.theme.primaryColor,
+                      progress: completedCount > 0
+                          ? (completedCount / state.tasks.length) * 100
+                          : 0),
+                );
+              }
+              return Container();
+            },
+          )
         ],
       ),
     );
+  }
+
+  void _showAddTaskModal(BuildContext parentContext) {
+    showModalBottomSheet<bool>(
+      backgroundColor: Colors.white,
+      context: parentContext,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => AddTaskBottomSheet(
+        taskListId: parentContext.read<TaskCubit>().taskListId!,
+      ),
+    ).then((result) {
+      if (result != null) {
+        _showSuccessSnackBar(context, LocaleKeys.taskAddSuccessSnack.tr());
+      }
+    });
   }
 
   void _showWarningSnackBar(BuildContext context, String message) {
