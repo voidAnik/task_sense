@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:task_sense/core/error/exceptions.dart';
@@ -73,16 +74,21 @@ class TaskRepositoryImpl implements TaskRepository {
     try {
       final count = await _dataSource.countTasks();
       return Right(count);
-    } catch (e) {
-      return Left(DatabaseFailure(error: e.toString()));
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(error: e.error));
     }
   }
 
   @override
   void closeStream() {
-    if (_taskStreamController != null) {
-      _taskStreamController!.close();
-      _taskStreamController = null;
+    if (_taskStreamController != null && !_taskStreamController!.isClosed) {
+      try {
+        _taskStreamController!.close();
+      } catch (e) {
+        log('stream closing failed');
+      } finally {
+        _taskStreamController = null;
+      }
     }
   }
 }

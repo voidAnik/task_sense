@@ -11,7 +11,7 @@ class TaskListModel extends TaskList {
     return TaskListModel(
       id: json['id'] as int?,
       title: json['title'] as String,
-      created: DateTime.parse(json['dueDate'] as String),
+      created: DateTime.parse(json['created'] as String),
     );
   }
 
