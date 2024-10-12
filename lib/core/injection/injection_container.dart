@@ -17,13 +17,14 @@ import 'package:task_sense/features/task_management/domain/repositories/task_lis
 import 'package:task_sense/features/task_management/domain/repositories/task_repository.dart';
 import 'package:task_sense/features/task_management/domain/use_cases/add_task.dart';
 import 'package:task_sense/features/task_management/domain/use_cases/add_task_list.dart';
+import 'package:task_sense/features/task_management/domain/use_cases/delete_task.dart';
 import 'package:task_sense/features/task_management/domain/use_cases/get_task_count.dart';
 import 'package:task_sense/features/task_management/domain/use_cases/get_task_list.dart';
 import 'package:task_sense/features/task_management/domain/use_cases/get_tasks.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_count_cubit.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_cubit.dart';
+import 'package:task_sense/features/task_management/presentation/blocs/task_edit_cubit.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_list_cubit.dart';
-import 'package:task_sense/features/task_management/presentation/blocs/task_modal_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -61,14 +62,15 @@ Future<void> init() async {
     ..registerLazySingleton(() => AddTaskList(getIt()))
     ..registerLazySingleton(() => AddTask(getIt()))
     ..registerLazySingleton(() => GetTaskList(getIt()))
-    ..registerLazySingleton(() => GetTasks(getIt()));
+    ..registerLazySingleton(() => GetTasks(getIt()))
+    ..registerLazySingleton(() => DeleteTask(getIt()));
 
   //* Blocs
   getIt
     ..registerFactory(() => AccelerometerCubit(getIt()))
     ..registerFactory(() => GyroCubit(getIt()))
     ..registerFactory(() => TaskCountCubit(getIt()))
-    ..registerFactory(() => TaskCubit(getIt(), getIt(), getIt()))
-    ..registerFactory(() => TaskModalCubit(getIt()))
+    ..registerFactory(() => TaskCubit(getIt(), getIt(), getIt(), getIt()))
+    ..registerFactory(() => TaskEditCubit(getIt()))
     ..registerFactory(() => TaskListCubit(getIt()));
 }

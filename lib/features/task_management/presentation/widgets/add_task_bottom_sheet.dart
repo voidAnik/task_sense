@@ -6,18 +6,18 @@ import 'package:task_sense/core/extensions/context_extension.dart';
 import 'package:task_sense/core/injection/injection_container.dart';
 import 'package:task_sense/core/language/generated/locale_keys.g.dart';
 import 'package:task_sense/core/widgets/custom_checkbox.dart';
-import 'package:task_sense/features/task_management/presentation/blocs/task_modal_cubit.dart';
+import 'package:task_sense/features/task_management/presentation/blocs/task_edit_cubit.dart';
 import 'package:task_sense/features/task_management/presentation/widgets/date_picker_modal.dart';
 
-class AddTaskModal extends StatefulWidget {
-  const AddTaskModal({super.key, required this.taskListId});
+class AddTaskBottomSheet extends StatefulWidget {
+  const AddTaskBottomSheet({super.key, required this.taskListId});
   final int taskListId;
 
   @override
-  State<AddTaskModal> createState() => _AddTaskModalState();
+  State<AddTaskBottomSheet> createState() => _AddTaskBottomSheetState();
 }
 
-class _AddTaskModalState extends State<AddTaskModal> {
+class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   final FocusNode _focusNode = FocusNode();
 
   @override
@@ -45,7 +45,7 @@ class _AddTaskModalState extends State<AddTaskModal> {
       ),
       builder: (BuildContext context) {
         return DatePickerModal(onSelection: (selectedDate) {
-          parentContext.read<TaskModalCubit>().setDueDate(selectedDate);
+          parentContext.read<TaskEditCubit>().setDueDate(selectedDate);
         });
       },
     );
@@ -54,9 +54,9 @@ class _AddTaskModalState extends State<AddTaskModal> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<TaskModalCubit>(),
+      create: (context) => getIt<TaskEditCubit>(),
       child: Builder(builder: (context) {
-        context.read<TaskModalCubit>().taskListId = widget.taskListId;
+        context.read<TaskEditCubit>().taskListId = widget.taskListId;
         return AnimatedPadding(
           duration: const Duration(milliseconds: 500),
           padding: EdgeInsets.only(
@@ -79,8 +79,8 @@ class _AddTaskModalState extends State<AddTaskModal> {
     );
   }
 
-  BlocBuilder<TaskModalCubit, TaskModalState> _noteInput(BuildContext context) {
-    return BlocBuilder<TaskModalCubit, TaskModalState>(
+  BlocBuilder<TaskEditCubit, TaskEditState> _noteInput(BuildContext context) {
+    return BlocBuilder<TaskEditCubit, TaskEditState>(
       builder: (context, state) {
         if (state.openNote) {
           return Padding(
@@ -99,7 +99,7 @@ class _AddTaskModalState extends State<AddTaskModal> {
               ),
               maxLines: 3,
               onChanged: (value) {
-                context.read<TaskModalCubit>().setNote(value);
+                context.read<TaskEditCubit>().setNote(value);
               },
             ),
           );
@@ -115,7 +115,7 @@ class _AddTaskModalState extends State<AddTaskModal> {
       children: [
         CustomCheckbox(
             onChange: (value) {
-              context.read<TaskModalCubit>().toggleComplete();
+              context.read<TaskEditCubit>().toggleComplete();
             },
             initialValue: false),
         Expanded(
@@ -137,11 +137,11 @@ class _AddTaskModalState extends State<AddTaskModal> {
             textInputAction: TextInputAction.done,
             autofocus: true,
             onChanged: (value) {
-              context.read<TaskModalCubit>().setTaskName(value);
+              context.read<TaskEditCubit>().setTaskName(value);
             },
           ),
         ),
-        BlocBuilder<TaskModalCubit, TaskModalState>(
+        BlocBuilder<TaskEditCubit, TaskEditState>(
           builder: (context, state) {
             return IconButton(
               icon: Icon(
@@ -152,7 +152,7 @@ class _AddTaskModalState extends State<AddTaskModal> {
               ),
               onPressed: () {
                 if (state.taskName.isNotEmpty) {
-                  context.read<TaskModalCubit>().addTask();
+                  context.read<TaskEditCubit>().addTask();
                   Navigator.of(context).pop(true);
                 }
               },
@@ -164,7 +164,7 @@ class _AddTaskModalState extends State<AddTaskModal> {
   }
 
   Widget _createOptionButtons(BuildContext context) {
-    return BlocBuilder<TaskModalCubit, TaskModalState>(
+    return BlocBuilder<TaskEditCubit, TaskEditState>(
       builder: (context, state) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -177,7 +177,7 @@ class _AddTaskModalState extends State<AddTaskModal> {
                     : disabledIconColor,
               ),
               onPressed: () {
-                context.read<TaskModalCubit>().toggleRemindMe();
+                context.read<TaskEditCubit>().toggleRemindMe();
               },
             ),
             IconButton(
@@ -188,7 +188,7 @@ class _AddTaskModalState extends State<AddTaskModal> {
                     : disabledIconColor,
               ),
               onPressed: () {
-                context.read<TaskModalCubit>().toggleNote();
+                context.read<TaskEditCubit>().toggleNote();
               },
             ),
             IconButton(

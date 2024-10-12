@@ -18,6 +18,14 @@
   "addNoteHint": "Add a note..",
   "addDueDate": "Add Due Date",
   "remindMe": "Remind Me",
-  "addNote": "Add Note"
-
+  "addNote": "Add Note",
+  "noTaskTitleSnack": "No task title found!",
+  "taskAddSuccessSnack": "Task added successfully",
+  "taskSavedSuccessSnack": "Task saved successfully",
+  "taskDeletedSuccessSnack": "'Task deleted successfully'",
+  "dismiss": "DISMISS",
+  "delete": "Delete",
+  "inputNote": "Note:",
+  "deleteHint": "This task will be permanently deleted",
+  "deleteTask": "Delete Task"
 }

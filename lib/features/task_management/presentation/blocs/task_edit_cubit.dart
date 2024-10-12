@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_sense/features/task_management/data/models/task_model.dart';
 import 'package:task_sense/features/task_management/domain/use_cases/add_task.dart';
 
-class TaskModalCubit extends Cubit<TaskModalState> {
+class TaskEditCubit extends Cubit<TaskEditState> {
   final AddTask _addTask;
-  TaskModalCubit(this._addTask) : super(const TaskModalState());
+  TaskEditCubit(this._addTask) : super(const TaskEditState());
   int? taskListId;
   int? taskId;
 
@@ -63,7 +63,7 @@ class TaskModalCubit extends Cubit<TaskModalState> {
   }
 }
 
-class TaskModalState {
+class TaskEditState {
   final String taskName;
   final DateTime? dueDate;
   final String? note;
@@ -71,7 +71,7 @@ class TaskModalState {
   final bool isCompleted;
   final bool openNote;
 
-  const TaskModalState({
+  const TaskEditState({
     this.taskName = '',
     this.dueDate,
     this.note,
@@ -80,7 +80,7 @@ class TaskModalState {
     this.openNote = false,
   });
 
-  TaskModalState copyWith({
+  TaskEditState copyWith({
     String? taskName,
     DateTime? dueDate,
     String? note,
@@ -88,7 +88,7 @@ class TaskModalState {
     bool? isCompleted,
     bool? openNote,
   }) {
-    return TaskModalState(
+    return TaskEditState(
       taskName: taskName ?? this.taskName,
       dueDate: dueDate ?? this.dueDate,
       note: note ?? this.note,

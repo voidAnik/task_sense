@@ -5,6 +5,7 @@ import 'package:task_sense/features/task_management/data/models/task_list_model.
 import 'package:task_sense/features/task_management/data/models/task_model.dart';
 import 'package:task_sense/features/task_management/domain/use_cases/add_task.dart';
 import 'package:task_sense/features/task_management/domain/use_cases/add_task_list.dart';
+import 'package:task_sense/features/task_management/domain/use_cases/delete_task.dart';
 import 'package:task_sense/features/task_management/domain/use_cases/get_tasks.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_state.dart';
 
@@ -12,8 +13,9 @@ class TaskCubit extends Cubit<TaskState> {
   final AddTaskList _addTaskList;
   final GetTasks _getTasks;
   final AddTask _addTask;
+  final DeleteTask _deleteTask;
 
-  TaskCubit(this._addTaskList, this._getTasks, this._addTask)
+  TaskCubit(this._addTaskList, this._getTasks, this._addTask, this._deleteTask)
       : super(TaskInitial());
 
   int? taskListId;
@@ -54,6 +56,17 @@ class TaskCubit extends Cubit<TaskState> {
       log('task adding failed: $failure');
     }, (_) {
       log('task added successfully $task');
+    });
+  }
+
+  Future<void> deleteTask(
+      {required int taskId, required int taskListId}) async {
+    final responseOrFailure =
+        await _deleteTask(params: DeleteParams(taskId, taskListId));
+    responseOrFailure.fold((failure) {
+      log('task delete failed: $failure');
+    }, (_) {
+      log('task deleted successfully $taskId');
     });
   }
 

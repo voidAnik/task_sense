@@ -2,6 +2,7 @@
 class Assets {
   Assets._();
 
+  static const String iconsDelete = 'assets/icons/delete.png';
   static const String iconsList = 'assets/icons/list.png';
   static const String iconsLogo = 'assets/icons/logo.png';
   static const String iconsSearch = 'assets/icons/search.png';

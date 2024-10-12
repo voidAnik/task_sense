@@ -21,5 +21,14 @@ abstract class  LocaleKeys {
   static const addDueDate = 'addDueDate';
   static const remindMe = 'remindMe';
   static const addNote = 'addNote';
+  static const noTaskTitleSnack = 'noTaskTitleSnack';
+  static const taskAddSuccessSnack = 'taskAddSuccessSnack';
+  static const taskSavedSuccessSnack = 'taskSavedSuccessSnack';
+  static const taskDeletedSuccessSnack = 'taskDeletedSuccessSnack';
+  static const dismiss = 'dismiss';
+  static const delete = 'delete';
+  static const inputNote = 'inputNote';
+  static const deleteHint = 'deleteHint';
+  static const deleteTask = 'deleteTask';
 
 }

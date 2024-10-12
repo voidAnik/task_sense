@@ -13,7 +13,7 @@ import 'package:task_sense/features/task_management/data/models/task_model.dart'
 import 'package:task_sense/features/task_management/presentation/blocs/task_cubit.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_state.dart';
 import 'package:task_sense/features/task_management/presentation/screens/task_details_screen.dart';
-import 'package:task_sense/features/task_management/presentation/widgets/add_task_modal.dart';
+import 'package:task_sense/features/task_management/presentation/widgets/add_task_bottom_sheet.dart';
 import 'package:task_sense/features/task_management/presentation/widgets/circular_button.dart';
 import 'package:task_sense/features/task_management/presentation/widgets/task_list_widget.dart';
 
@@ -41,6 +41,13 @@ class _TaskScreenState extends State<TaskScreen> {
       _titleController.text = widget.taskList!.title;
     }
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    _titleController.dispose();
+    super.dispose();
   }
 
   @override
@@ -79,7 +86,7 @@ class _TaskScreenState extends State<TaskScreen> {
             if (parentContext.read<TaskCubit>().taskListId != null) {
               _showAddTaskModal(parentContext);
             } else {
-              _showWarningSnackBar(context, 'No task tile found!');
+              _showWarningSnackBar(context, LocaleKeys.noTaskTitleSnack.tr());
             }
           },
           child: Material(
@@ -122,13 +129,13 @@ class _TaskScreenState extends State<TaskScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) => AddTaskModal(
+      builder: (context) => AddTaskBottomSheet(
         taskListId: parentContext.read<TaskCubit>().taskListId!,
       ),
     ).then((result) {
       log('i am here result: $result');
       if (result != null) {
-        _showSuccessSnackBar(context, 'Task added successfully!');
+        _showSuccessSnackBar(context, LocaleKeys.taskAddSuccessSnack.tr());
       }
     });
   }
@@ -161,7 +168,9 @@ class _TaskScreenState extends State<TaskScreen> {
             extra: task)
         .then((result) {
       if (result != null && result == true) {
-        _showSuccessSnackBar(context, 'Task is Saved successfully!');
+        _showSuccessSnackBar(context, LocaleKeys.taskSavedSuccessSnack.tr());
+      } else if (result != null && result == false) {
+        _showSuccessSnackBar(context, LocaleKeys.taskDeletedSuccessSnack.tr());
       }
     });
   }
@@ -219,7 +228,7 @@ class _TaskScreenState extends State<TaskScreen> {
       behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 2),
       action: SnackBarAction(
-        label: 'DISMISS',
+        label: LocaleKeys.dismiss.tr(),
         textColor: Colors.white,
         onPressed: () {},
       ),

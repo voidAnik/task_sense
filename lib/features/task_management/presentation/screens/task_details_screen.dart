@@ -4,12 +4,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_sense/config/theme/colors.dart';
+import 'package:task_sense/core/constants/assets.dart';
 import 'package:task_sense/core/extensions/context_extension.dart';
 import 'package:task_sense/core/injection/injection_container.dart';
 import 'package:task_sense/core/language/generated/locale_keys.g.dart';
 import 'package:task_sense/features/task_management/data/models/task_model.dart';
-import 'package:task_sense/features/task_management/presentation/blocs/task_modal_cubit.dart';
+import 'package:task_sense/features/task_management/presentation/blocs/task_cubit.dart';
+import 'package:task_sense/features/task_management/presentation/blocs/task_edit_cubit.dart';
 import 'package:task_sense/features/task_management/presentation/widgets/date_picker_modal.dart';
+import 'package:task_sense/features/task_management/presentation/widgets/delete_bottom_sheet.dart';
 
 class TaskDetailsScreen extends StatefulWidget {
   static const String path = '/task_details_screen';
@@ -38,10 +41,24 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
   }
 
   @override
+  void dispose() {
+    _noteController.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          getIt<TaskModalCubit>()..initState(widget.task, widget.taskListId),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              getIt<TaskEditCubit>()..initState(widget.task, widget.taskListId),
+        ),
+        BlocProvider(
+          create: (context) => getIt<TaskCubit>(),
+        ),
+      ],
       child: Builder(builder: (context) {
         return Scaffold(
           appBar: AppBar(
@@ -52,47 +69,80 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            actions: [
-              Container(
-                width: 64,
-                height: 32,
-                margin: const EdgeInsets.only(right: 8),
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    elevation: WidgetStateProperty.all(0),
-                    padding: WidgetStateProperty.all(EdgeInsets.zero),
-                    backgroundColor: WidgetStateProperty.all(
-                      context.theme.primaryColor,
-                    ),
-                    shape: WidgetStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                  ),
-                  onPressed: () {
-                    context.read<TaskModalCubit>().addTask();
-                    Navigator.of(context).pop(true);
-                  },
-                  child: Text(
-                    LocaleKeys.done.tr(),
-                    style: context.textStyle.titleSmall!
-                        .copyWith(color: const Color(0xFFF2F2F2)),
-                  ),
-                ),
-              )
-            ],
+            actions: [_createDoneButton(context)],
           ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+          floatingActionButton: _createDeleteButton(context),
           body: _createBody(context),
         );
       }),
     );
   }
 
+  Container _createDoneButton(BuildContext context) {
+    return Container(
+      width: 64,
+      height: 32,
+      margin: const EdgeInsets.only(right: 8),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          elevation: WidgetStateProperty.all(0),
+          padding: WidgetStateProperty.all(EdgeInsets.zero),
+          backgroundColor: WidgetStateProperty.all(
+            context.theme.primaryColor,
+          ),
+          shape: WidgetStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+        ),
+        onPressed: () {
+          context.read<TaskEditCubit>().addTask();
+          Navigator.of(context).pop(true);
+        },
+        child: Text(
+          LocaleKeys.done.tr(),
+          style: context.textStyle.titleSmall!
+              .copyWith(color: const Color(0xFFF2F2F2)),
+        ),
+      ),
+    );
+  }
+
+  Padding _createDeleteButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: GestureDetector(
+        onTap: () {
+          _showDeleteModal(context);
+        },
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const ImageIcon(
+              AssetImage(Assets.iconsDelete),
+              color: Colors.redAccent,
+              size: 24,
+            ),
+            const SizedBox(
+              width: 8,
+            ),
+            Text(
+              LocaleKeys.delete.tr(),
+              style: context.textStyle.titleSmall!
+                  .copyWith(color: disabledIconColor),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   _createBody(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(16),
-      child: BlocBuilder<TaskModalCubit, TaskModalState>(
+      child: BlocBuilder<TaskEditCubit, TaskEditState>(
         builder: (context, state) {
           return Column(
             children: [
@@ -112,14 +162,14 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
     );
   }
 
-  Widget _createAddNoteOption(TaskModalState state, BuildContext context) {
-    return BlocBuilder<TaskModalCubit, TaskModalState>(
+  Widget _createAddNoteOption(TaskEditState state, BuildContext context) {
+    return BlocBuilder<TaskEditCubit, TaskEditState>(
       builder: (context, state) {
         return Column(
           children: [
             GestureDetector(
               onTap: () {
-                context.read<TaskModalCubit>().toggleNote();
+                context.read<TaskEditCubit>().toggleNote();
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   FocusScope.of(context).requestFocus(_focusNode);
                 });
@@ -137,7 +187,7 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                   ),
                   Text(
                     (state.note != null || state.openNote)
-                        ? 'Note:'
+                        ? LocaleKeys.inputNote.tr()
                         : LocaleKeys.addNote.tr(),
                     style: context.textStyle.bodyLarge!.copyWith(
                         color: (state.note != null || state.openNote)
@@ -176,20 +226,20 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
         ),
         maxLines: 4,
         onChanged: (value) {
-          context.read<TaskModalCubit>().setNote(value);
+          context.read<TaskEditCubit>().setNote(value);
         },
         onSubmitted: (value) {
           if (value.isEmpty) {
-            context.read<TaskModalCubit>().toggleNote();
+            context.read<TaskEditCubit>().toggleNote();
           } else {
-            context.read<TaskModalCubit>().setNote(value);
+            context.read<TaskEditCubit>().setNote(value);
           }
         },
       ),
     );
   }
 
-  Widget _createDueDateOption(TaskModalState state, BuildContext context) {
+  Widget _createDueDateOption(TaskEditState state, BuildContext context) {
     return GestureDetector(
       onTap: () {
         _showDatePicker(context);
@@ -216,10 +266,10 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
     );
   }
 
-  Widget _createRemindOption(BuildContext context, TaskModalState state) {
+  Widget _createRemindOption(BuildContext context, TaskEditState state) {
     return GestureDetector(
       onTap: () {
-        context.read<TaskModalCubit>().toggleRemindMe();
+        context.read<TaskEditCubit>().toggleRemindMe();
       },
       child: Row(
         children: [
@@ -254,8 +304,25 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
       ),
       builder: (BuildContext context) {
         return DatePickerModal(onSelection: (selectedDate) {
-          parentContext.read<TaskModalCubit>().setDueDate(selectedDate);
+          parentContext.read<TaskEditCubit>().setDueDate(selectedDate);
         });
+      },
+    );
+  }
+
+  Future<void> _showDeleteModal(BuildContext parentContext) async {
+    showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      context: parentContext,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return DeleteBottomSheet(
+          onDelete: () {
+            parentContext.read<TaskCubit>().deleteTask(
+                taskId: widget.task.id!, taskListId: widget.taskListId);
+            Navigator.of(context).pop(false);
+          },
+        );
       },
     );
   }
