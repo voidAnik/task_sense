@@ -11,24 +11,36 @@ import 'package:task_sense/features/task_management/data/models/task_model.dart'
 import 'package:task_sense/features/task_management/presentation/blocs/task_cubit.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_state.dart';
 
-class TaskListWidget extends StatelessWidget {
+class TaskListWidget extends StatefulWidget {
   const TaskListWidget({super.key, required this.onPressed});
   final Function(TaskModel task) onPressed;
 
   @override
-  Widget build(BuildContext context) {
+  State<TaskListWidget> createState() => _TaskListWidgetState();
+}
+
+class _TaskListWidgetState extends State<TaskListWidget> {
+  @override
+  void initState() {
     context.read<TaskCubit>().listenTasks();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<TaskCubit, TaskState>(builder: (context, state) {
       if (state is TaskLoaded) {
         final tasks = state.tasks;
-        return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16),
-          child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: tasks.length,
-              itemBuilder: (context, index) {
-                return _createListItem(context, task: tasks[index]);
-              }),
+        return Expanded(
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: tasks.length,
+                itemBuilder: (context, index) {
+                  return _createListItem(context, task: tasks[index]);
+                }),
+          ),
         );
       } else if (state is TaskError) {
         return ErrorMessage(error: state.error);
@@ -39,7 +51,7 @@ class TaskListWidget extends StatelessWidget {
 
   Widget _createListItem(BuildContext context, {required TaskModel task}) {
     return GestureDetector(
-      onTap: () => onPressed(task),
+      onTap: () => widget.onPressed(task),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),

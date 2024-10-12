@@ -153,7 +153,7 @@ class _AddTaskModalState extends State<AddTaskModal> {
               onPressed: () {
                 if (state.taskName.isNotEmpty) {
                   context.read<TaskModalCubit>().addTask();
-                  Navigator.pop(context);
+                  Navigator.of(context).pop(true);
                 }
               },
             );

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,8 +9,10 @@ import 'package:task_sense/core/extensions/context_extension.dart';
 import 'package:task_sense/core/injection/injection_container.dart';
 import 'package:task_sense/core/language/generated/locale_keys.g.dart';
 import 'package:task_sense/features/task_management/data/models/task_list_model.dart';
+import 'package:task_sense/features/task_management/data/models/task_model.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_cubit.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_state.dart';
+import 'package:task_sense/features/task_management/presentation/screens/task_details_screen.dart';
 import 'package:task_sense/features/task_management/presentation/widgets/add_task_modal.dart';
 import 'package:task_sense/features/task_management/presentation/widgets/circular_button.dart';
 import 'package:task_sense/features/task_management/presentation/widgets/task_list_widget.dart';
@@ -53,6 +57,7 @@ class _TaskScreenState extends State<TaskScreen> {
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
+            surfaceTintColor: context.theme.colorScheme.surface,
             title: Text(LocaleKeys.taskListsTitle.tr()),
           ),
           body: _createBody(context),
@@ -72,17 +77,7 @@ class _TaskScreenState extends State<TaskScreen> {
         child: GestureDetector(
           onTap: () {
             if (parentContext.read<TaskCubit>().taskListId != null) {
-              showModalBottomSheet(
-                backgroundColor: Colors.white,
-                context: parentContext,
-                isScrollControlled: true,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                ),
-                builder: (context) => AddTaskModal(
-                  taskListId: parentContext.read<TaskCubit>().taskListId!,
-                ),
-              );
+              _showAddTaskModal(parentContext);
             } else {
               _showWarningSnackBar(context, 'No task tile found!');
             }
@@ -119,6 +114,25 @@ class _TaskScreenState extends State<TaskScreen> {
     );
   }
 
+  void _showAddTaskModal(BuildContext parentContext) {
+    showModalBottomSheet<bool>(
+      backgroundColor: Colors.white,
+      context: parentContext,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => AddTaskModal(
+        taskListId: parentContext.read<TaskCubit>().taskListId!,
+      ),
+    ).then((result) {
+      log('i am here result: $result');
+      if (result != null) {
+        _showSuccessSnackBar(context, 'Task added successfully!');
+      }
+    });
+  }
+
   _createBody(BuildContext context) {
     return Column(
       children: [
@@ -128,9 +142,7 @@ class _TaskScreenState extends State<TaskScreen> {
             if (context.read<TaskCubit>().taskListId != null) {
               return TaskListWidget(
                 onPressed: (task) {
-                  context.push(
-                      '${TaskScreen.path}?id=${context.read<TaskCubit>().taskListId!}',
-                      extra: task);
+                  _navigateToTaskDetails(context, task);
                 },
               );
             }
@@ -139,6 +151,19 @@ class _TaskScreenState extends State<TaskScreen> {
         )
       ],
     );
+  }
+
+  Future<void> _navigateToTaskDetails(
+      BuildContext context, TaskModel task) async {
+    await context
+        .push(
+            '${TaskDetailsScreen.path}?id=${context.read<TaskCubit>().taskListId!}',
+            extra: task)
+        .then((result) {
+      if (result != null && result == true) {
+        _showSuccessSnackBar(context, 'Task is Saved successfully!');
+      }
+    });
   }
 
   Widget _createTopWidget(BuildContext context) {
@@ -198,6 +223,32 @@ class _TaskScreenState extends State<TaskScreen> {
         textColor: Colors.white,
         onPressed: () {},
       ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void _showSuccessSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Row(
+        children: [
+          const Icon(
+            Icons.check_circle_outline,
+            color: Colors.white,
+          ),
+          const SizedBox(
+            width: 8,
+          ),
+          Text(
+            message,
+            style: context.textStyle.titleMedium!
+                .copyWith(color: Colors.white), // Text color
+          ),
+        ],
+      ),
+      backgroundColor: context.theme.primaryColor,
+      behavior: SnackBarBehavior.floating,
+      duration: const Duration(seconds: 3),
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);

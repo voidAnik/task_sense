@@ -15,6 +15,9 @@
   "taskTitleHint": "Untitled Task",
   "done": "Done",
   "cancel": "Cancel",
-  "addNoteHint": "Add a note.."
+  "addNoteHint": "Add a note..",
+  "addDueDate": "Add Due Date",
+  "remindMe": "Remind Me",
+  "addNote": "Add Note"
 
 }

@@ -18,5 +18,8 @@ abstract class  LocaleKeys {
   static const done = 'done';
   static const cancel = 'cancel';
   static const addNoteHint = 'addNoteHint';
+  static const addDueDate = 'addDueDate';
+  static const remindMe = 'remindMe';
+  static const addNote = 'addNote';
 
 }

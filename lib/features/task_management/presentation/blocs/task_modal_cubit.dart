@@ -34,6 +34,18 @@ class TaskModalCubit extends Cubit<TaskModalState> {
     emit(state.copyWith(dueDate: date));
   }
 
+  void initState(TaskModel task, int taskListId) {
+    this.taskListId = taskListId;
+    taskId = task.id;
+    emit(state.copyWith(
+      taskName: task.taskName,
+      dueDate: task.dueDate,
+      note: task.note,
+      remindMe: task.remindMe,
+      isCompleted: task.isCompleted,
+    ));
+  }
+
   Future<void> addTask() async {
     final TaskModel task = TaskModel(
         taskListId: taskListId!,
