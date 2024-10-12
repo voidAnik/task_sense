@@ -38,7 +38,7 @@ class TaskProgressIndicator extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(left: 8.0),
           child: Text(
-            "$progress%",
+            "${progress.toInt()}%",
             style: context.textStyle.titleMedium!
                 .copyWith(color: secondaryTextColor),
           ),

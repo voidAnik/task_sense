@@ -50,6 +50,7 @@ class TaskEditCubit extends Cubit<TaskEditState> {
 
   Future<void> addTask() async {
     final TaskModel task = TaskModel(
+        id: taskId,
         taskListId: taskListId!,
         taskName: state.taskName,
         dueDate: state.dueDate,
