@@ -4,7 +4,8 @@
 1. [Project Overview](#project-overview)
 2. [Resources](#resources)
 3. [Features](#features)
-4. [Technical Specifications](#technical-specifications)
+4. [App Screenshots](#app-screenshots)
+5. [Technical Specifications](#technical-specifications)
     - [Architecture](#architecture)
     - [State Management](#state-management)
     - [Database](#database)
@@ -12,8 +13,8 @@
     - [Dependency Injection](#dependency-injection)
     - [Localization](#localization)
     - [Flavor Configuration](#flavor-configuration)
-5. [Installation](#installation)
-6. [Running the App](#running-the-app)
+6. [Installation](#installation)
+7. [Running the App](#running-the-app)
     - [With Android Studio](#with-android-studio)
     - [From Command Line](#from-command-line)
 
@@ -39,6 +40,20 @@ Task Sense is a Flutter-based mobile application designed to help users manage t
 - **Real-Time Sensor Data**: Displays two graphs showing real-time data from the gyroscope and accelerometer sensors.
 - **Movement Alert**: Generates an alert when there is significant movement on any two axes simultaneously, indicating high activity.
 
+## App Screenshots
+<p float="left">
+  <img src="/assets/ss/s1.jpeg" width="150" />&nbsp;&nbsp;&nbsp;
+  <img src="/assets/ss/s2.jpeg" width="150" />&nbsp;&nbsp;&nbsp;
+  <img src="/assets/ss/s3.jpeg" width="150" />&nbsp;&nbsp;&nbsp;
+  <img src="/assets/ss/s4.jpeg" width="150" />&nbsp;&nbsp;&nbsp;
+  <img src="/assets/ss/s5.jpeg" width="150" />&nbsp;&nbsp;&nbsp;
+  <img src="/assets/ss/s6.jpeg" width="150" />&nbsp;&nbsp;&nbsp;
+  <img src="/assets/ss/s7.jpeg" width="150" />&nbsp;&nbsp;&nbsp;
+  <img src="/assets/ss/s8.jpeg" width="150" />&nbsp;&nbsp;&nbsp;
+  <img src="/assets/ss/s9.jpeg" width="150" />&nbsp;&nbsp;&nbsp;
+  <img src="/assets/ss/s10.jpeg" width="150" />
+</p>
+
 ## Technical Specifications
 ### Architecture
 - **Clean Architecture**: Applied to ensure separation of concerns, scalability, maintainability, and testability. The architecture is divided into data, domain, and presentation layers.
@@ -60,7 +75,6 @@ Task Sense is a Flutter-based mobile application designed to help users manage t
 
 ### Flavor Configuration
 - **Different App Flavors**: Configured for development and production environments.
-
 
 
 ## Installation
