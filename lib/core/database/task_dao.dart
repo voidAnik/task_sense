@@ -44,7 +44,7 @@ class TaskDao {
     final result = await _db.query(
       tasksTable,
       where:
-          '$taskColumnDueDate >= ? AND $taskColumnDueDate < ?AND $taskColumnIsCompleted = 0',
+          '$taskColumnDueDate >= ? AND $taskColumnDueDate < ? AND $taskColumnIsCompleted = 0 AND $taskColumnRemindMe = 1',
       whereArgs: [todayStart.toIso8601String(), todayEnd.toIso8601String()],
     );
 
