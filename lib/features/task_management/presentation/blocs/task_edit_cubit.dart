@@ -1,11 +1,13 @@
 import 'dart:developer';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_sense/features/task_management/data/models/task_model.dart';
 import 'package:task_sense/features/task_management/domain/use_cases/add_task.dart';
 
 class TaskEditCubit extends Cubit<TaskEditState> {
   final AddTask _addTask;
+
   TaskEditCubit(this._addTask) : super(const TaskEditState());
   int? taskListId;
   int? taskId;
@@ -63,7 +65,7 @@ class TaskEditCubit extends Cubit<TaskEditState> {
   }
 }
 
-class TaskEditState {
+class TaskEditState extends Equatable {
   final String taskName;
   final DateTime? dueDate;
   final String? note;
@@ -97,4 +99,19 @@ class TaskEditState {
       openNote: openNote ?? this.openNote,
     );
   }
+
+  @override
+  String toString() {
+    return 'TaskEditState{taskName: $taskName, dueDate: $dueDate, note: $note, remindMe: $remindMe, isCompleted: $isCompleted, openNote: $openNote}';
+  }
+
+  @override
+  List<Object?> get props => [
+        taskName,
+        dueDate,
+        note,
+        remindMe,
+        isCompleted,
+        openNote,
+      ];
 }
