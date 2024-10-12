@@ -11,7 +11,6 @@ class TaskListCubit extends Cubit<TaskState> {
   TaskListCubit(this._getTaskList) : super(TaskInitial());
 
   Future<void> fetch() async {
-    emit(TaskLoading());
     final responseOrFailure = await _getTaskList(params: NoParams());
     responseOrFailure.fold((failure) {
       log('getting task list failed: $failure');

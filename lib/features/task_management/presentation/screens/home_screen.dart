@@ -5,8 +5,11 @@ import 'package:task_sense/config/theme/colors.dart';
 import 'package:task_sense/core/constants/assets.dart';
 import 'package:task_sense/core/extensions/context_extension.dart';
 import 'package:task_sense/core/injection/injection_container.dart';
+import 'package:task_sense/features/task_management/data/models/task_list_model.dart';
 import 'package:task_sense/features/task_management/domain/entities/task_count.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_count_cubit.dart';
+import 'package:task_sense/features/task_management/presentation/blocs/task_list_cubit.dart';
+import 'package:task_sense/features/task_management/presentation/blocs/task_state.dart';
 import 'package:task_sense/features/task_management/presentation/screens/task_screen.dart';
 import 'package:task_sense/features/task_management/presentation/widgets/task_search_delegate.dart';
 import 'package:task_sense/features/task_management/presentation/widgets/task_title_list_widget.dart';
@@ -18,24 +21,34 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<TaskCountCubit>()..taskCount(),
-      child: Scaffold(
-        body: _createBody(context),
-        floatingActionButton: FloatingActionButton.small(
-          backgroundColor: context.theme.primaryColor,
-          onPressed: () {
-            context.push(TaskScreen.path);
-          },
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
-          child: const Icon(
-            Icons.add,
-            size: 24,
-            color: Colors.white,
-          ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => getIt<TaskCountCubit>()..taskCount(),
         ),
-      ),
+        BlocProvider(
+          create: (context) => getIt<TaskListCubit>()..fetch(),
+        ),
+      ],
+      child: Builder(builder: (context) {
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: _createBody(context),
+          floatingActionButton: FloatingActionButton.small(
+            backgroundColor: context.theme.primaryColor,
+            onPressed: () {
+              _navigateToTaskScreen(context, null);
+            },
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
+            child: const Icon(
+              Icons.add,
+              size: 24,
+              color: Colors.white,
+            ),
+          ),
+        );
+      }),
     );
   }
 
@@ -52,11 +65,19 @@ class HomeScreen extends StatelessWidget {
         ),
         TaskTitleListWidget(
           onTap: (taskList) {
-            context.push(TaskScreen.path, extra: taskList);
+            _navigateToTaskScreen(context, taskList);
           },
         ),
       ],
     );
+  }
+
+  void _navigateToTaskScreen(
+      BuildContext context, TaskListModel? taskList) async {
+    await context.push(TaskScreen.path, extra: taskList).then((_) {
+      context.read<TaskListCubit>().fetch();
+      context.read<TaskCountCubit>().taskCount();
+    });
   }
 
   Widget _createHeader(BuildContext context) {
@@ -96,15 +117,29 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
           const Spacer(),
-          IconButton(
-              onPressed: () {
-                showSearch(context: context, delegate: TaskSearchDelegate());
-              },
-              icon: Image.asset(
-                Assets.iconsSearch,
-                height: 24,
-                width: 24,
-              ))
+          BlocBuilder<TaskListCubit, TaskState>(
+            builder: (context, state) {
+              return IconButton(
+                  onPressed: () {
+                    if (state is TaskListLoaded) {
+                      showSearch(
+                        context: context,
+                        delegate: TaskSearchDelegate(
+                          onTap: (taskList) {
+                            _navigateToTaskScreen(context, taskList);
+                          },
+                          taskList: state.taskList,
+                        ),
+                      );
+                    }
+                  },
+                  icon: Image.asset(
+                    Assets.iconsSearch,
+                    height: 24,
+                    width: 24,
+                  ));
+            },
+          )
         ],
       ),
     );
