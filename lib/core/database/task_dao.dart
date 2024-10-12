@@ -26,7 +26,6 @@ class TaskDao {
     );
   }
 
-  /// Fetch all tasks belonging to a specific task list.
   Future<List<TaskModel>> getAllTasks(int taskListId) async {
     final result = await _db.query(
       tasksTable,
@@ -34,6 +33,22 @@ class TaskDao {
       whereArgs: [taskListId],
     );
     log('getting tasks for id: $taskListId result: $result');
+    return result.map((e) => TaskModel.fromJson(e)).toList();
+  }
+
+  Future<List<TaskModel>> getTasksDueToday() async {
+    final today = DateTime.now();
+    final todayStart = DateTime(today.year, today.month, today.day);
+    final todayEnd = todayStart.add(const Duration(days: 1));
+
+    final result = await _db.query(
+      tasksTable,
+      where:
+          '$taskColumnDueDate >= ? AND $taskColumnDueDate < ?AND $taskColumnIsCompleted = 0',
+      whereArgs: [todayStart.toIso8601String(), todayEnd.toIso8601String()],
+    );
+
+    log('Tasks due today: $result');
     return result.map((e) => TaskModel.fromJson(e)).toList();
   }
 

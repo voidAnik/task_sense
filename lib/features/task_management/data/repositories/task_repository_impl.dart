@@ -48,6 +48,16 @@ class TaskRepositoryImpl implements TaskRepository {
   }
 
   @override
+  Future<Either<Failure, List<TaskModel>>> getTodayTasks() async {
+    try {
+      final tasks = await _dataSource.getTodayTasks();
+      return Right(tasks);
+    } on DatabaseException catch (e) {
+      return Left(DatabaseFailure(error: e.error));
+    }
+  }
+
+  @override
   Future<Either<Failure, void>> deleteTask(int id, int listId) async {
     try {
       await _dataSource.deleteTask(id);

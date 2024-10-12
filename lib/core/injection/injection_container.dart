@@ -19,8 +19,10 @@ import 'package:task_sense/features/task_management/domain/use_cases/add_task.da
 import 'package:task_sense/features/task_management/domain/use_cases/add_task_list.dart';
 import 'package:task_sense/features/task_management/domain/use_cases/delete_task.dart';
 import 'package:task_sense/features/task_management/domain/use_cases/get_task_count.dart';
+import 'package:task_sense/features/task_management/domain/use_cases/get_task_due_today.dart';
 import 'package:task_sense/features/task_management/domain/use_cases/get_task_list.dart';
 import 'package:task_sense/features/task_management/domain/use_cases/get_tasks.dart';
+import 'package:task_sense/features/task_management/presentation/blocs/get_due_tasks_cubit.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_count_cubit.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_cubit.dart';
 import 'package:task_sense/features/task_management/presentation/blocs/task_edit_cubit.dart';
@@ -63,7 +65,8 @@ Future<void> init() async {
     ..registerLazySingleton(() => AddTask(getIt()))
     ..registerLazySingleton(() => GetTaskList(getIt()))
     ..registerLazySingleton(() => GetTasks(getIt()))
-    ..registerLazySingleton(() => DeleteTask(getIt()));
+    ..registerLazySingleton(() => DeleteTask(getIt()))
+    ..registerLazySingleton(() => GetTaskDueToday(getIt()));
 
   //* Blocs
   getIt
@@ -72,5 +75,6 @@ Future<void> init() async {
     ..registerFactory(() => TaskCountCubit(getIt()))
     ..registerFactory(() => TaskCubit(getIt(), getIt(), getIt(), getIt()))
     ..registerFactory(() => TaskEditCubit(getIt()))
-    ..registerFactory(() => TaskListCubit(getIt()));
+    ..registerFactory(() => TaskListCubit(getIt()))
+    ..registerFactory(() => GetDueTasksCubit(getIt()));
 }
