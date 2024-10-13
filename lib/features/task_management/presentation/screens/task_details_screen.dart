@@ -58,6 +58,7 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
       ],
       child: Builder(builder: (context) {
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: SizedBox(
               width: context.width * 0.5,
